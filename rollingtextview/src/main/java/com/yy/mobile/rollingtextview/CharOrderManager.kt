@@ -9,7 +9,7 @@ import java.util.*
  */
 internal class CharOrderManager {
 
-    var charStrategy: CharOrderStrategy = QuickAnimation
+    var charStrategy: CharOrderStrategy = Strategy.NormalAnimation
 
     private val charOrderList = mutableListOf<LinkedHashSet<Char>>()
 

@@ -1,5 +1,7 @@
 package com.yy.mobile.rollingtextview
 
+import android.support.annotation.CallSuper
+
 /**
  * Created by 张宇 on 2018/2/28.
  * E-mail: zhangyu4@yy.com
@@ -33,6 +35,7 @@ interface CharOrderStrategy {
  */
 abstract class SimpleCharOrderStrategy : CharOrderStrategy {
 
+    @CallSuper
     override fun findCharOrder(
             sourceText: CharSequence,
             targetText: CharSequence,

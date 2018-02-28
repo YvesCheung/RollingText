@@ -3,7 +3,9 @@ package com.yy.mobile.rollingtext;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.yy.mobile.rollingtextview.Direction;
 import com.yy.mobile.rollingtextview.RollingTextView;
+import com.yy.mobile.rollingtextview.Strategy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         view = findViewById(R.id.rollingTextView);
         view.addCharOrder(RollingTextView.Number);
+        view.setCharStrategy(Strategy.SameDirectionAnimation(Direction.SCROLL_DOWN));
         Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {

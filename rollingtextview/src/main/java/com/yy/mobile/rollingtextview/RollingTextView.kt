@@ -56,14 +56,13 @@ class RollingTextView : View {
 
     private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
 
-        val res = context.resources
-
         var shadowColor = 0
         var shadowDx = 0f
         var shadowDy = 0f
         var shadowRadius = 0f
         var text = ""
-        var textSize = 12f
+        var textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                12f, context.resources.displayMetrics)
 
         fun applyTypedArray(arr: TypedArray) {
             gravity = arr.getInt(R.styleable.RollingTextView_android_gravity, gravity)
@@ -228,10 +227,10 @@ class RollingTextView : View {
                 start()
             }
         } else {
-            val orginalStrategy = charStrategy
-            charStrategy = NoAnimation
+            val originalStrategy = charStrategy
+            charStrategy = Strategy.NoAnimation
             textManager.setText(text)
-            charStrategy = orginalStrategy
+            charStrategy = originalStrategy
 
             textManager.onAnimationEnd()
             checkForReLayout()
@@ -267,7 +266,8 @@ class RollingTextView : View {
     var textColor: Int = Color.BLACK
         set(color) {
             if (field != color) {
-                textPaint.color = textColor
+                field = color
+                textPaint.color = color
                 invalidate()
             }
         }
