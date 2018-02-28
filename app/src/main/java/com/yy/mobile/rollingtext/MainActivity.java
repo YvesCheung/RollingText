@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
@@ -18,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     RollingTextView view;
 
-    private List<String> list = Arrays.asList("1", "9","12","19","24","36","47","56","63","78","89","95","132");
+    private List<String> list = Arrays.asList("1", "9", "12", "19", "24", "36", "47", "56", "63", "78", "89", "95", "132");
     private int idx = 0;
 
     @Override
@@ -27,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         view = findViewById(R.id.rollingTextView);
-        view.addCharOrder("0123456789");
-        view.setTextSize(20);
-        view.setText("9");
+        view.addCharOrder(RollingTextView.Number);
         Observable.interval(3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {

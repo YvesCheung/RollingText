@@ -61,7 +61,7 @@ internal class TextManager(
     }
 
     val currentTextWidth: Float
-        get() = textColumns.map { it.currentWidth }.reduce { total, next -> total + next }
+        get() = textColumns.map { it.currentWidth }.fold(0f) { total, next -> total + next }
 
     fun setText(targetText: CharSequence) {
 

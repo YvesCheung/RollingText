@@ -6,16 +6,14 @@ import android.animation.ValueAnimator
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
+import android.content.res.TypedArray
+import android.graphics.*
 import android.os.Build
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 
 /**
  * Created by 张宇 on 2018/2/26.
@@ -35,6 +33,7 @@ class RollingTextView : View {
 
     private val viewBounds = Rect()
     private var gravity: Int = Gravity.END
+    private var textStyle = Typeface.NORMAL
 
     constructor(context: Context) : super(context) {
         init(context, null, 0, 0)
@@ -56,6 +55,58 @@ class RollingTextView : View {
     }
 
     private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
+
+        val res = context.resources
+
+        var shadowColor = 0
+        var shadowDx = 0f
+        var shadowDy = 0f
+        var shadowRadius = 0f
+        var text = ""
+        var textSize = 12f
+
+        fun applyTypedArray(arr: TypedArray) {
+            gravity = arr.getInt(R.styleable.RollingTextView_android_gravity, gravity)
+            shadowColor = arr.getColor(R.styleable.RollingTextView_android_shadowColor, shadowColor)
+            shadowDx = arr.getFloat(R.styleable.RollingTextView_android_shadowDx, shadowDx)
+            shadowDy = arr.getFloat(R.styleable.RollingTextView_android_shadowDy, shadowDy)
+            shadowRadius = arr.getFloat(R.styleable.RollingTextView_android_shadowRadius, shadowRadius)
+            text = arr.getString(R.styleable.RollingTextView_android_text) ?: ""
+            textColor = arr.getColor(R.styleable.RollingTextView_android_textColor, textColor)
+            textSize = arr.getDimension(R.styleable.RollingTextView_android_textSize, textSize)
+            textStyle = arr.getInt(R.styleable.RollingTextView_android_textStyle, textStyle)
+        }
+
+        val arr = context.obtainStyledAttributes(attrs, R.styleable.RollingTextView,
+                defStyleAttr, defStyleRes)
+
+        val textAppearanceResId = arr.getResourceId(
+                R.styleable.RollingTextView_android_textAppearance, -1)
+
+        if (textAppearanceResId != -1) {
+            val textAppearanceArr = context.obtainStyledAttributes(
+                    textAppearanceResId, R.styleable.RollingTextView)
+            applyTypedArray(textAppearanceArr)
+            textAppearanceArr.recycle()
+        }
+
+        applyTypedArray(arr)
+
+        animationDuration = arr.getInt(R.styleable.RollingTextView_duration, animationDuration.toInt()).toLong()
+
+        if (shadowColor != 0) {
+            textPaint.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor)
+        }
+        if (textStyle != 0) {
+            typeface = textPaint.typeface
+        }
+
+
+        this.textSize = textSize
+        setText(text, false)
+
+        arr.recycle()
+
         animator.addUpdateListener {
             textManager.updateAnimation(it.animatedFraction)
             checkForReLayout()
@@ -147,6 +198,12 @@ class RollingTextView : View {
         canvas.clipRect(0f, 0f, currentWidth, currentHeight)
     }
 
+    private fun onTextPaintMeasurementChanged() {
+        textManager.updateFontMatrics()
+        checkForReLayout()
+        invalidate()
+    }
+
 
     /***************************** Public API below ***********************************************/
 
@@ -182,6 +239,18 @@ class RollingTextView : View {
         }
     }
 
+    var typeface: Typeface?
+        set(value) {
+            textPaint.typeface = when (textStyle) {
+                Typeface.BOLD_ITALIC -> Typeface.create(value, Typeface.BOLD_ITALIC)
+                Typeface.BOLD -> Typeface.create(value, Typeface.BOLD)
+                Typeface.ITALIC -> Typeface.create(value, Typeface.ITALIC)
+                else -> value
+            }
+            onTextPaintMeasurementChanged()
+        }
+        get() = textPaint.typeface
+
     val currentText
         get() = textManager.currentText
 
@@ -192,8 +261,16 @@ class RollingTextView : View {
     fun setTextSize(unit: Int, size: Float) {
         val r: Resources = context?.resources ?: Resources.getSystem()
         textPaint.textSize = TypedValue.applyDimension(unit, size, r.displayMetrics)
-        textManager.updateFontMatrics()
+        onTextPaintMeasurementChanged()
     }
+
+    var textColor: Int = Color.BLACK
+        set(color) {
+            if (field != color) {
+                textPaint.color = textColor
+                invalidate()
+            }
+        }
 
     var charStrategy: CharOrderStrategy
         set(value) {
@@ -201,13 +278,22 @@ class RollingTextView : View {
         }
         get() = charOrderManager.charStrategy
 
+    fun addAnimatorListener(listener: Animator.AnimatorListener) = animator.addListener(listener)
+
+    fun removeAnimatorListener(listener: Animator.AnimatorListener) = animator.removeListener(listener)
+
+    /**
+     * 添加支持的序列，如[Number]/[Alphabet]
+     */
     fun addCharOrder(orderList: CharSequence) = charOrderManager.addCharOrder(orderList.asIterable())
 
     fun addCharOrder(orderList: Collection<Char>) = charOrderManager.addCharOrder(orderList)
 
     fun addCharOrder(orderList: Array<Char>) = charOrderManager.addCharOrder(orderList.asIterable())
 
-    fun addAnimatorListener(listener: Animator.AnimatorListener) = animator.addListener(listener)
+    companion object {
+        const val Number = "0123456789"
 
-    fun removeAnimatorListener(listener: Animator.AnimatorListener) = animator.removeListener(listener)
+        const val Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    }
 }
