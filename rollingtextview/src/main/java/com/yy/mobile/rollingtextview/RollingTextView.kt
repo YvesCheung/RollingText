@@ -9,6 +9,7 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.*
 import android.os.Build
+import android.os.Looper
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -203,10 +204,9 @@ class RollingTextView : View {
         invalidate()
     }
 
-
     /***************************** Public API below ***********************************************/
 
-    var animationDuration: Long = 1500L
+    var animationDuration: Long = 750L
 
     private var targetText: CharSequence = ""
 

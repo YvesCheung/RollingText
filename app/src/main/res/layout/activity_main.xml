@@ -5,6 +5,16 @@
     android:layout_height="match_parent">
 
     <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/timeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="00:00"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
         android:id="@+id/rollingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

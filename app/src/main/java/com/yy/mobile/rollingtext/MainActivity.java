@@ -1,5 +1,6 @@
 package com.yy.mobile.rollingtext;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -7,10 +8,14 @@ import com.yy.mobile.rollingtextview.Direction;
 import com.yy.mobile.rollingtextview.RollingTextView;
 import com.yy.mobile.rollingtextview.Strategy;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -36,6 +41,20 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void accept(Long aLong) throws Exception {
                         view.setText(list.get(idx++ % list.size()));
+                    }
+                });
+
+        final RollingTextView timeView = findViewById(R.id.timeView);
+        timeView.setTextSize(20);
+        timeView.setAnimationDuration(300);
+
+        @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("hh:mm:ss");
+        Flowable.interval(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        timeView.setText(format.format(new Date()));
                     }
                 });
 //        Observable.timer(2,TimeUnit.SECONDS)
