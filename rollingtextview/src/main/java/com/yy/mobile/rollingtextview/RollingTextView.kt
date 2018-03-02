@@ -256,9 +256,9 @@ class RollingTextView : View {
     val currentText
         get() = textManager.currentText
 
-    var textSize: Float
-        set(value) = setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
-        get() = textPaint.textSize
+    fun setTextSize(textSize: Float) = setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+
+    fun getTextSize() = textPaint.textSize
 
     fun setTextSize(unit: Int, size: Float) {
         val r: Resources = context?.resources ?: Resources.getSystem()
