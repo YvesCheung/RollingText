@@ -9,12 +9,14 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.*
 import android.os.Build
-import android.os.Looper
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Interpolator
+import com.yy.mobile.rollingtextview.RollingTextView.Companion.Number
 
 /**
  * Created by 张宇 on 2018/2/26.
@@ -35,6 +37,8 @@ class RollingTextView : View {
     private val viewBounds = Rect()
     private var gravity: Int = Gravity.END
     private var textStyle = Typeface.NORMAL
+
+    private var targetText: CharSequence = ""
 
     constructor(context: Context) : super(context) {
         init(context, null, 0, 0)
@@ -101,8 +105,7 @@ class RollingTextView : View {
             typeface = textPaint.typeface
         }
 
-
-        this.textSize = textSize
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         setText(text, false)
 
         arr.recycle()
@@ -208,7 +211,7 @@ class RollingTextView : View {
 
     var animationDuration: Long = 750L
 
-    private var targetText: CharSequence = ""
+    var animationInterpolator: Interpolator = AccelerateDecelerateInterpolator()
 
     var text: CharSequence
         set(value) = setText(value, !TextUtils.isEmpty(targetText))
@@ -223,7 +226,7 @@ class RollingTextView : View {
                     cancel()
                 }
                 duration = animationDuration
-//                interpolator = AccelerateDecelerateInterpolator()
+                interpolator = animationInterpolator
                 start()
             }
         } else {
@@ -272,6 +275,15 @@ class RollingTextView : View {
             }
         }
 
+    /**
+     * 设置动画滚动策略,如：
+     *
+     * [Strategy.NoAnimation]
+     *
+     * [Strategy.NormalAnimation]
+     *
+     * [Strategy.SameDirectionAnimation]
+     */
     var charStrategy: CharOrderStrategy
         set(value) {
             charOrderManager.charStrategy = value
@@ -287,8 +299,14 @@ class RollingTextView : View {
      */
     fun addCharOrder(orderList: CharSequence) = charOrderManager.addCharOrder(orderList.asIterable())
 
+    /**
+     * 添加支持的序列，如[Number]/[Alphabet]
+     */
     fun addCharOrder(orderList: Collection<Char>) = charOrderManager.addCharOrder(orderList)
 
+    /**
+     * 添加支持的序列，如[Number]/[Alphabet]
+     */
     fun addCharOrder(orderList: Array<Char>) = charOrderManager.addCharOrder(orderList.asIterable())
 
     companion object {
