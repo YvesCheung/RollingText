@@ -213,9 +213,9 @@ class RollingTextView : View {
 
     var animationInterpolator: Interpolator = AccelerateDecelerateInterpolator()
 
-    var text: CharSequence
-        set(value) = setText(value, !TextUtils.isEmpty(targetText))
-        get() = targetText
+    fun setText(text: CharSequence) = setText(text, !TextUtils.isEmpty(targetText))
+
+    fun getText() = targetText
 
     fun setText(text: CharSequence, animate: Boolean) {
         targetText = text
