@@ -13,6 +13,10 @@ interface CharOrderStrategy {
 
     /**
      * 在滚动动画计算前回调，可以做初始化的事情
+     *
+     * Notifies the animation calculation will start immediately,
+     * you can override this method and do some initialization work
+     *
      * @param sourceText 原来的文本
      * @param targetText 动画后的目标文本
      * @param charPool 外部设定的可选的字符变化序列
@@ -23,6 +27,10 @@ interface CharOrderStrategy {
      * 从[sourceText]滚动变化到[targetText]，对于索引[index]的位置，给出变化的字符顺序
      *
      * 也可以直接继承[SimpleCharOrderStrategy]，可以更简单的实现策略
+     *
+     * you need to override this method to tell me how the animation should behave.
+     * this method will be invoked many times with different index, which is from 0 to
+     * max(sourceText.length, targetText.length)
      *
      * @param sourceText 原来的文本
      * @param targetText 动画后的目标文本
@@ -36,6 +44,9 @@ interface CharOrderStrategy {
 
     /**
      * 在滚动动画计算后回调
+     *
+     * you can override this method to clean up after animation
+     *
      * @param sourceText 原来的文本
      * @param targetText 动画后的目标文本
      * @param charPool 外部设定的可选的字符变化序列
@@ -44,7 +55,8 @@ interface CharOrderStrategy {
 }
 
 /**
- * 简单的策略模版
+ * 简单的策略模版：在[findCharOrder]中选择一个重写即可
+ *
  * a simple strategy template
  */
 abstract class SimpleCharOrderStrategy : CharOrderStrategy {

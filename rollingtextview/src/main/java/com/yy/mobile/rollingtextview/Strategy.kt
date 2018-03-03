@@ -77,14 +77,20 @@ object Strategy {
     @JvmField
     val CarryBitAnimation: CharOrderStrategy = object : CharOrderStrategy {
 
-        var sourceIndex: IntArray? = null
-        var targetIndex: IntArray? = null
-        var sourceCumulative: IntArray? = null
-        var targetCumulative: IntArray? = null
-        var charOrderList: List<Collection<Char>>? = null
-        var direction: Direction = Direction.SCROLL_DOWN
+        private var sourceIndex: IntArray? = null
+        private var targetIndex: IntArray? = null
+        private var sourceCumulative: IntArray? = null
+        private var targetCumulative: IntArray? = null
+        private var charOrderList: List<Collection<Char>>? = null
+        private var toBigger: Boolean = true
+        private var direction: Direction = Direction.SCROLL_DOWN
 
         override fun beforeCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {
+
+            if (sourceText.length > 10 || targetText.length > 10) {
+                throw IllegalStateException("your text is too long, it may overflow the integer calculation." +
+                        " please use other animation strategy.")
+            }
 
             val maxLen = Math.max(sourceText.length, targetText.length)
             val srcArray = IntArray(maxLen)
@@ -128,6 +134,7 @@ object Strategy {
             this.sourceCumulative = sourceCumulative
             this.targetCumulative = targetCumulative
             this.charOrderList = charOrderList
+            this.toBigger = srcTotal < tgtTotal
             this.direction = if (srcTotal > tgtTotal) Direction.SCROLL_UP else Direction.SCROLL_DOWN
         }
 
@@ -162,14 +169,12 @@ object Strategy {
                 if (srcIndex[index] == -1) first = TextManager.EMPTY
                 if (tgtIndex[index] == -1) last = TextManager.EMPTY
                 return extraCircularList(
-                        if (direction == Direction.SCROLL_UP)
-                            orderList.asReversed()
-                        else orderList,
-                        size,
-                        Math.max(srcIndex[index], 0),
-                        first,
-                        last
-                ) to direction
+                        rawList = determineCharOrder(orderList),
+                        size = size,
+                        firstIndex = Math.max(srcIndex[index], 0),
+                        first = first,
+                        last = last
+                ) to determineDirection()
             }
             return NormalAnimation.findCharOrder(sourceText, targetText, index, charPool)
         }
@@ -183,5 +188,15 @@ object Strategy {
             val circularList = CircularList(rawList, size, firstIndex)
             return ExtraList(circularList, first, last)
         }
+
+        fun determineCharOrder(orderList: List<Char>): List<Char> {
+            return if (direction == Direction.SCROLL_UP) {
+                orderList.asReversed()
+            } else {
+                orderList
+            }
+        }
+
+        fun determineDirection(): Direction = if (toBigger) Direction.SCROLL_DOWN else Direction.SCROLL_UP
     }
 }

@@ -4,6 +4,12 @@ package com.yy.mobile.rollingtextview
  * Created by 张宇 on 2018/3/3.
  * E-mail: zhangyu4@yy.com
  * YY: 909017428
+ *
+ * 可以在原来的[list]上额外添加一个头元素[first]和一个尾元素[last]
+ *
+ * @param list 原来的list
+ * @param first 可选的头节点，为空则不会添加
+ * @param last 可选的尾节点，尾空则不会添加
  */
 class ExtraList<T>(
         private val list: List<T>,
@@ -82,7 +88,7 @@ class ExtraList<T>(
     override fun listIterator(index: Int): ListIterator<T> = ExtraIterator(index)
 
     override fun subList(fromIndex: Int, toIndex: Int): List<T> {
-        throw IllegalStateException("Not support")
+        throw IllegalStateException("Not Support")
     }
 
     private inner class ExtraIterator(private var index: Int = 0) : ListIterator<T> {
@@ -95,9 +101,7 @@ class ExtraList<T>(
 
         override fun hasNext() = index < size
 
-        override fun hasPrevious(): Boolean {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
+        override fun hasPrevious() = index > 0
 
         override fun next(): T {
             if (!hasNext()) throw NoSuchElementException()

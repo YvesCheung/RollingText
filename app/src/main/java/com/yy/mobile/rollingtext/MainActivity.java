@@ -33,37 +33,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        view = findViewById(R.id.rollingTextView);
-//        view.addCharOrder(CharOrder.Number);
-//        view.setCharStrategy(Strategy.SameDirectionAnimation(Direction.SCROLL_DOWN));
-//        Observable.interval(3, TimeUnit.SECONDS)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Long>() {
-//                    @Override
-//                    public void accept(Long aLong) throws Exception {
-//                        view.setText(list.get(idx++ % list.size()));
-//                    }
-//                });
-//
-//        final RollingTextView timeView = findViewById(R.id.timeView);
-//        timeView.setTextSize(20);
-//        timeView.setAnimationDuration(300);
-//
-//        @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("hh:mm:ss");
-//        Flowable.interval(1, TimeUnit.SECONDS)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Consumer<Long>() {
-//                    @Override
-//                    public void accept(Long aLong) throws Exception {
-//                        timeView.setText(format.format(new Date()));
-//                    }
-//                });
+        view = findViewById(R.id.rollingTextView);
+        view.addCharOrder(CharOrder.Number);
+        view.setCharStrategy(Strategy.SameDirectionAnimation(Direction.SCROLL_DOWN));
+        Observable.interval(3, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        view.setText(list.get(idx++ % list.size()));
+                    }
+                });
+
+        final RollingTextView timeView = findViewById(R.id.timeView);
+        timeView.setTextSize(20);
+        timeView.setAnimationDuration(300);
+
+        @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("hh:mm:ss");
+        Flowable.interval(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        timeView.setText(format.format(new Date()));
+                    }
+                });
 
         RollingTextView carryView = findViewById(R.id.carryTextView);
         carryView.setAnimationDuration(5000L);
         carryView.addCharOrder(CharOrder.Number);
         carryView.setCharStrategy(Strategy.CarryBitAnimation);
         carryView.setText("1");
-        carryView.setText("353425346");
+        carryView.setText("359");
     }
 }

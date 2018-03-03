@@ -20,8 +20,6 @@ internal class TextManager(
 
     private val textColumns = mutableListOf<TextColumn>()
 
-    private val charOrderList = mutableListOf<LinkedHashSet<Char>>()
-
     init {
         updateFontMatrics()
     }

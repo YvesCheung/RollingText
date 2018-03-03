@@ -33,8 +33,8 @@ internal class TextColumn(
 
     private var targetWidth = 0f
 
-    private var previousBottomDelta = 0f
-    private var bottomDelta = 0f
+    private var previousBottomDelta = 0.0
+    private var bottomDelta = 0.0
 
     private var index = 0
 
@@ -54,7 +54,7 @@ internal class TextColumn(
         initChangeCharList()
         index = 0
         previousBottomDelta = bottomDelta
-        bottomDelta = 0f
+        bottomDelta = 0.0
     }
 
     private fun initChangeCharList() {
@@ -68,16 +68,11 @@ internal class TextColumn(
 
     fun updateAnimation(progress: Float) {
 
-        if (progress == 1f) {
-            index = changeCharList.size - 1
-            currentChar = changeCharList.last()
-            bottomDelta = 0f
-            currentWidth = manager.charWidth(currentChar, textPaint)
-            return
-        }
+        //当changeCharList.size大于7位数的时候 有可能使Float溢出 所以要用Double
+        val progressDouble: Double = progress.toDouble()
 
         //相对于字符序列的进度
-        val sizeProgress = (changeCharList.size - 1) * progress
+        val sizeProgress = (changeCharList.size - 1) * progressDouble
 
         //通过进度获得当前字符
         index = sizeProgress.toInt()
@@ -93,7 +88,8 @@ internal class TextColumn(
         val charWidth = manager.charWidth(currentChar, textPaint)
         currentWidth = if (index + 1 < changeCharList.size) {
             val nextCharWidth = manager.charWidth(changeCharList[index + 1], textPaint)
-            charWidth + (nextCharWidth - charWidth) * progress
+//            charWidth + (nextCharWidth - charWidth) * progress
+            Math.max(charWidth, nextCharWidth)
         } else {
             charWidth
         }
@@ -101,8 +97,8 @@ internal class TextColumn(
 
     fun onAnimationEnd() {
         currentChar = targetChar
-        bottomDelta = 0f
-        previousBottomDelta = 0f
+        bottomDelta = 0.0
+        previousBottomDelta = 0.0
     }
 
     fun draw(canvas: Canvas) {
@@ -116,8 +112,8 @@ internal class TextColumn(
             }
         }
 
-        drawText(index + 1, bottomDelta - manager.textHeight * direction.value)
-        drawText(index, bottomDelta)
-        drawText(index - 1, bottomDelta + manager.textHeight * direction.value)
+        drawText(index + 1, bottomDelta.toFloat() - manager.textHeight * direction.value)
+        drawText(index, bottomDelta.toFloat())
+        drawText(index - 1, bottomDelta.toFloat() + manager.textHeight * direction.value)
     }
 }

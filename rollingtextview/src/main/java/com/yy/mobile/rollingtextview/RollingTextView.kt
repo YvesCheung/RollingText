@@ -290,11 +290,17 @@ class RollingTextView : View {
     /**
      * 设置动画滚动策略,如：
      *
+     * 直接更替字符串
      * [Strategy.NoAnimation]
      *
+     * 普通滚动
      * [Strategy.NormalAnimation]
      *
+     * 指定方向滚动
      * [Strategy.SameDirectionAnimation]
+     *
+     * 进位滚动
+     * [Strategy.CarryBitAnimation]
      */
     var charStrategy: CharOrderStrategy
         set(value) {
@@ -341,9 +347,9 @@ class RollingTextView : View {
 }
 
 object CharOrder {
-    const val Number = "0123456789"
+    const val Number = "1234567890"
 
-    const val Hex = "0123456789ABCDEF"
+    const val Hex = "123456789ABCDEF0"
 
     const val Binary = "01"
 
