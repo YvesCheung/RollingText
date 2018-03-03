@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         timeView.setTextSize(20);
         timeView.setAnimationDuration(300);
 
-        @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("HH:mm:ss");
         Flowable.interval(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
