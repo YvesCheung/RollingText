@@ -18,6 +18,8 @@ class CircularList<T> @JvmOverloads constructor(
         return list[rawIndex]
     }
 
+    override fun isEmpty() = size <= 0
+
     override fun indexOf(element: T) = indexOfFirst { it == element }
 
     override fun lastIndexOf(element: T) = indexOfLast { it == element }

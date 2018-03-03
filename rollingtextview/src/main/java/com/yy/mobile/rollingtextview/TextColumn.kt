@@ -9,11 +9,12 @@ import com.yy.mobile.rollingtextview.TextManager.Companion.EMPTY
  * E-mail: zhangyu4@yy.com
  * YY: 909017428
  */
+@Suppress("MemberVisibilityCanBePrivate")
 internal class TextColumn(
         private val manager: TextManager,
         private val textPaint: Paint,
-        private var changeCharList: List<Char>,
-        private var direction: Direction) {
+        var changeCharList: List<Char>,
+        var direction: Direction) {
 
     var currentWidth: Float = 0f
 
@@ -66,6 +67,14 @@ internal class TextColumn(
     }
 
     fun updateAnimation(progress: Float) {
+
+        if (progress == 1f) {
+            index = changeCharList.size - 1
+            currentChar = changeCharList.last()
+            bottomDelta = 0f
+            currentWidth = manager.charWidth(currentChar, textPaint)
+            return
+        }
 
         //相对于字符序列的进度
         val sizeProgress = (changeCharList.size - 1) * progress

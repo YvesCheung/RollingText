@@ -20,7 +20,15 @@ internal class CharOrderManager {
         charOrderList.add(set)
     }
 
-    fun findCharOrder(sourceText: CharSequence, targetText: CharSequence, index: Int): Pair<List<Char>, Direction> {
+    fun findCharOrder(sourceText: CharSequence, targetText: CharSequence, index: Int)
+            : Pair<List<Char>, Direction> {
         return charStrategy.findCharOrder(sourceText, targetText, index, charOrderList)
     }
+
+    fun beforeCharOrder(sourceText: CharSequence, targetText: CharSequence) =
+            charStrategy.beforeCompute(sourceText, targetText, charOrderList)
+
+
+    fun afterCharOrder(sourceText: CharSequence, targetText: CharSequence) =
+            charStrategy.afterCompute(sourceText, targetText, charOrderList)
 }

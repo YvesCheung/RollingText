@@ -12,6 +12,14 @@ package com.yy.mobile.rollingtextview
 interface CharOrderStrategy {
 
     /**
+     * 在滚动动画计算前回调，可以做初始化的事情
+     * @param sourceText 原来的文本
+     * @param targetText 动画后的目标文本
+     * @param charPool 外部设定的可选的字符变化序列
+     */
+    fun beforeCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {}
+
+    /**
      * 从[sourceText]滚动变化到[targetText]，对于索引[index]的位置，给出变化的字符顺序
      *
      * 也可以直接继承[SimpleCharOrderStrategy]，可以更简单的实现策略
@@ -25,6 +33,14 @@ interface CharOrderStrategy {
                       targetText: CharSequence,
                       index: Int,
                       charPool: CharPool): Pair<List<Char>, Direction>
+
+    /**
+     * 在滚动动画计算后回调
+     * @param sourceText 原来的文本
+     * @param targetText 动画后的目标文本
+     * @param charPool 外部设定的可选的字符变化序列
+     */
+    fun afterCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {}
 }
 
 /**
@@ -52,8 +68,7 @@ abstract class SimpleCharOrderStrategy : CharOrderStrategy {
             tgtChar = targetText[index - disTgt]
         }
 
-        val iterable = charPool.find { it.contains(srcChar) && it.contains(tgtChar) }
-        return findCharOrder(srcChar, tgtChar, iterable)
+        return findCharOrder(srcChar, tgtChar, index, charPool)
     }
 
     /**
@@ -61,13 +76,38 @@ abstract class SimpleCharOrderStrategy : CharOrderStrategy {
      *
      * @param sourceChar 原字符
      * @param targetChar 滚动变化后的目标字符
+     * @param index 字符索引
+     * @param charPool 外部设定的序列，如果没设定则为空
+     */
+    open fun findCharOrder(sourceChar: Char, targetChar: Char, index: Int, charPool: CharPool)
+            : Pair<List<Char>, Direction> {
+        val iterable = charPool.find { it.contains(sourceChar) && it.contains(targetChar) }
+        return findCharOrder(sourceChar, targetChar, index, iterable)
+    }
+
+    /**
+     * 从字符[sourceChar]滚动变化到[targetChar]的变化顺序
+     *
+     * @param sourceChar 原字符
+     * @param targetChar 滚动变化后的目标字符
+     * @param index 字符索引
      * @param order 外部设定的序列，如果没设定则为空
      */
-    abstract fun findCharOrder(sourceChar: Char, targetChar: Char, order: Iterable<Char>?): Pair<List<Char>, Direction>
+    open fun findCharOrder(sourceChar: Char, targetChar: Char, index: Int, order: Iterable<Char>?)
+            : Pair<List<Char>, Direction> {
+        return listOf(sourceChar, targetChar) to Direction.SCROLL_DOWN
+    }
 }
 
-typealias CharPool = List<Iterable<Char>>
+typealias CharPool = List<Collection<Char>>
 
+/**
+ * 字符动画滚动的方向：
+ *
+ * [SCROLL_UP] 向上滚动
+ *
+ * [SCROLL_DOWN] 向下滚动
+ */
 enum class Direction(var value: Int) {
     SCROLL_UP(-1),
     SCROLL_DOWN(1)

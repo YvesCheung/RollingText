@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.yy.mobile.rollingtextview.CharOrder;
 import com.yy.mobile.rollingtextview.Direction;
 import com.yy.mobile.rollingtextview.RollingTextView;
 import com.yy.mobile.rollingtextview.Strategy;
@@ -32,47 +33,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        view = findViewById(R.id.rollingTextView);
-        view.addCharOrder(RollingTextView.Number);
-        view.setCharStrategy(Strategy.SameDirectionAnimation(Direction.SCROLL_DOWN));
-        Observable.interval(3, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        view.setText(list.get(idx++ % list.size()));
-                    }
-                });
-
-        final RollingTextView timeView = findViewById(R.id.timeView);
-        timeView.setTextSize(20);
-        timeView.setAnimationDuration(300);
-
-        @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("hh:mm:ss");
-        Flowable.interval(1, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        timeView.setText(format.format(new Date()));
-                    }
-                });
-//        Observable.timer(2,TimeUnit.SECONDS)
+//        view = findViewById(R.id.rollingTextView);
+//        view.addCharOrder(CharOrder.Number);
+//        view.setCharStrategy(Strategy.SameDirectionAnimation(Direction.SCROLL_DOWN));
+//        Observable.interval(3, TimeUnit.SECONDS)
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(new Consumer<Long>() {
 //                    @Override
 //                    public void accept(Long aLong) throws Exception {
-//                        view.setText("1");
+//                        view.setText(list.get(idx++ % list.size()));
+//                    }
+//                });
+//
+//        final RollingTextView timeView = findViewById(R.id.timeView);
+//        timeView.setTextSize(20);
+//        timeView.setAnimationDuration(300);
+//
+//        @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("hh:mm:ss");
+//        Flowable.interval(1, TimeUnit.SECONDS)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Consumer<Long>() {
+//                    @Override
+//                    public void accept(Long aLong) throws Exception {
+//                        timeView.setText(format.format(new Date()));
 //                    }
 //                });
 
-//        List<Integer> integers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-//        CircularList<Integer> list = new CircularList<>(integers, 56, 16);
-//        int index = 0;
-//        for (int i : list) {
-//            Log.i("zyi", "index:" + index++ + " num:" + i);
-//        }
-//        Log.i("zyi", list.subList(10, 20).toString());
-//        Log.i("zyi", "index of 3 is " + list.indexOf(3));
+        RollingTextView carryView = findViewById(R.id.carryTextView);
+        carryView.setAnimationDuration(5000L);
+        carryView.addCharOrder(CharOrder.Number);
+        carryView.setCharStrategy(Strategy.CarryBitAnimation);
+        carryView.setText("1");
+        carryView.setText("353425346");
     }
 }

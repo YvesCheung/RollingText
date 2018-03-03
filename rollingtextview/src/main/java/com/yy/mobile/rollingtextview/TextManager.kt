@@ -77,6 +77,7 @@ internal class TextManager(
 
         val maxLen = Math.max(sourceText.length, targetText.length)
 
+        charOrderManager.beforeCharOrder(sourceText, targetText)
         for (idx in 0 until maxLen) {
             val (list, direction) = charOrderManager.findCharOrder(sourceText, targetText, idx)
 
@@ -86,6 +87,7 @@ internal class TextManager(
                 textColumns.add(idx, TextColumn(this, textPaint, list, direction))
             }
         }
+        charOrderManager.afterCharOrder(sourceText, targetText)
     }
 
     val currentText

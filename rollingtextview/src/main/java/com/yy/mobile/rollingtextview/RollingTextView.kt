@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.yy.mobile.rollingtextview
 
 import android.animation.Animator
@@ -14,15 +16,15 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
-import com.yy.mobile.rollingtextview.RollingTextView.Companion.Number
+import android.view.animation.LinearInterpolator
 
 /**
  * Created by 张宇 on 2018/2/26.
  * E-mail: zhangyu4@yy.com
  * YY: 909017428
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class RollingTextView : View {
 
     private var lastMeasuredDesiredWidth: Int = 0
@@ -209,14 +211,24 @@ class RollingTextView : View {
 
     /***************************** Public API below ***********************************************/
 
+    /**
+     * 滚动动画总时长
+     */
     var animationDuration: Long = 750L
 
-    var animationInterpolator: Interpolator = AccelerateDecelerateInterpolator()
+    var animationInterpolator: Interpolator = LinearInterpolator()
 
+    /**
+     * @param text 设置文本
+     */
     fun setText(text: CharSequence) = setText(text, !TextUtils.isEmpty(targetText))
 
     fun getText() = targetText
 
+    /**
+     * @param text 设置文本
+     * @param animate 是否需要滚动效果
+     */
     fun setText(text: CharSequence, animate: Boolean) {
         targetText = text
         if (animate) {
@@ -290,28 +302,52 @@ class RollingTextView : View {
         }
         get() = charOrderManager.charStrategy
 
+    /**
+     * 添加动画监听器
+     */
     fun addAnimatorListener(listener: Animator.AnimatorListener) = animator.addListener(listener)
 
+    /**
+     * 移除动画监听器
+     */
     fun removeAnimatorListener(listener: Animator.AnimatorListener) = animator.removeListener(listener)
 
     /**
-     * 添加支持的序列，如[Number]/[Alphabet]
+     * 添加支持的序列，如[CharOrder.Number]/[CharOrder.Alphabet]
+     *
+     * 如果orderList为[2,4,6,8,0]，那么从"440"到"844"的动画将会是"440"->"642"->"844"
+     *
+     * 与[charStrategy]配合使用定义动画效果
      */
     fun addCharOrder(orderList: CharSequence) = charOrderManager.addCharOrder(orderList.asIterable())
 
     /**
-     * 添加支持的序列，如[Number]/[Alphabet]
+     * 添加支持的序列，如[CharOrder.Number]/[CharOrder.Alphabet]
+     *
+     * 如果orderList为[2,4,6,8,0]，那么从"440"到"844"的动画将会是"440"->"642"->"844"
+     *
+     * 与[charStrategy]配合使用定义动画效果
      */
-    fun addCharOrder(orderList: Collection<Char>) = charOrderManager.addCharOrder(orderList)
+    fun addCharOrder(orderList: Iterable<Char>) = charOrderManager.addCharOrder(orderList)
 
     /**
-     * 添加支持的序列，如[Number]/[Alphabet]
+     * 添加支持的序列，如[CharOrder.Number]/[CharOrder.Alphabet]
+     *
+     * 如果orderList为[2,4,6,8,0]，那么从"440"到"844"的动画将会是"440"->"642"->"844"
+     *
+     * 与[charStrategy]配合使用定义动画效果
      */
     fun addCharOrder(orderList: Array<Char>) = charOrderManager.addCharOrder(orderList.asIterable())
+}
 
-    companion object {
-        const val Number = "0123456789"
+object CharOrder {
+    const val Number = "0123456789"
 
-        const val Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    }
+    const val Hex = "0123456789ABCDEF"
+
+    const val Binary = "01"
+
+    const val Alphabet = "abcdefghijklmnopqrstuvwxyz"
+
+    const val UpperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 }

@@ -11,8 +11,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="00:00"
-        android:textStyle="bold"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <com.yy.mobile.rollingtextview.RollingTextView
         android:id="@+id/rollingTextView"
@@ -26,4 +26,12 @@
         android:textStyle="italic"
         app:duration="300" />
 
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/carryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp" />
 </RelativeLayout>
