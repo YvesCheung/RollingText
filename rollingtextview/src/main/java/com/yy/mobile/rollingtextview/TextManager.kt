@@ -2,6 +2,7 @@ package com.yy.mobile.rollingtextview
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import java.util.*
 
 /**
  * Created by 张宇 on 2018/2/26.
@@ -19,6 +20,8 @@ internal class TextManager(
     private val map: MutableMap<Char, Float> = LinkedHashMap(36)
 
     private val textColumns = mutableListOf<TextColumn>()
+
+    private var charListColumns: List<List<Char>> = Collections.emptyList()
 
     init {
         updateFontMatrics()
@@ -45,15 +48,18 @@ internal class TextManager(
         //当changeCharList.size大于7位数的时候 有可能使Float溢出 所以要用Double
         val initialize = PreviousProgress(0, 0.0, progress.toDouble())
         textColumns.foldRightIndexed(initialize) { index, column, previousProgress ->
-            val nextProgress = charOrderManager.getProgress(previousProgress,
-                    index, textColumns.size, textColumns[index].changeCharList)
-            column.onAnimationUpdate(nextProgress.currentIndex,
+            val nextProgress = charOrderManager.getProgress(previousProgress, index,
+                    charListColumns, column.index)
+
+            val previous = column.onAnimationUpdate(nextProgress.currentIndex,
                     nextProgress.offsetPercentage, nextProgress.progress)
+            previous
         }
     }
 
     fun onAnimationEnd() {
         textColumns.forEach { it.onAnimationEnd() }
+        charOrderManager.afterCharOrder()
     }
 
     fun draw(canvas: Canvas) {
@@ -89,7 +95,7 @@ internal class TextManager(
                 textColumns.add(idx, TextColumn(this, textPaint, list, direction))
             }
         }
-        charOrderManager.afterCharOrder(sourceText, targetText)
+        charListColumns = textColumns.map { it.changeCharList }
     }
 
     val currentText

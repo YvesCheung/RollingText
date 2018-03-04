@@ -45,20 +45,16 @@ interface CharOrderStrategy {
 
     fun nextProgress(
             previousProgress: PreviousProgress,
-            index: Int,
-            size: Int,
-            charList: List<Char>): NextProgress
+            columnIndex: Int,
+            columns: List<List<Char>>,
+            charIndex: Int): NextProgress
 
     /**
      * 在滚动动画计算后回调
      *
      * you can override this method to clean up after animation
-     *
-     * @param sourceText 原来的文本
-     * @param targetText 动画后的目标文本
-     * @param charPool 外部设定的可选的字符变化序列
      */
-    fun afterCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {}
+    fun afterCompute() {}
 }
 
 /**
@@ -70,15 +66,17 @@ abstract class SimpleCharOrderStrategy : CharOrderStrategy {
 
     override fun beforeCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {}
 
-    override fun afterCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {}
+    override fun afterCompute() {}
 
     override fun nextProgress(
             previousProgress: PreviousProgress,
-            index: Int,
-            size: Int,
-            charList: List<Char>): NextProgress {
+            columnIndex: Int,
+            columns: List<List<Char>>,
+            charIndex: Int): NextProgress {
 
-        val factor = 1.0
+        val columnSize = columns.size
+        val charList = columns[columnIndex]
+        val factor = getFactor(previousProgress, columnIndex, columnSize, charList)
         //相对于字符序列的进度
         val sizeProgress = (charList.size - 1) * previousProgress.progress
 
@@ -88,14 +86,16 @@ abstract class SimpleCharOrderStrategy : CharOrderStrategy {
         //求底部偏移值
         val k = 1.0 / factor
         val b = (1.0 - factor) * k
-        val offsetPercentage = if (sizeProgress - currentCharIndex >= 1.0 - factor) {
-            (sizeProgress - currentCharIndex) * k - b
-        } else {
-            0.0
-        }
+        val offset = sizeProgress - currentCharIndex
+        val offsetPercentage = if (offset >= 1.0 - factor) offset * k - b else 0.0
 
         return NextProgress(currentCharIndex, offsetPercentage, previousProgress.progress)
     }
+
+    open fun getFactor(previousProgress: PreviousProgress,
+                       index: Int,
+                       size: Int,
+                       charList: List<Char>): Double = 1.0
 
     override fun findCharOrder(
             sourceText: CharSequence,

@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         carryView.addCharOrder(CharOrder.Number);
         carryView.setCharStrategy(Strategy.NonZeroFirstCarryBitAnimation);
         carryView.setText("1");
-        carryView.setText("230");
+        carryView.setText("100");
 //        carryView.addAnimatorListener(new AnimatorListenerAdapter() {
 //            @Override
 //            public void onAnimationEnd(Animator animation) {

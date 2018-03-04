@@ -36,7 +36,7 @@ internal class TextColumn(
     private var previousBottomDelta = 0.0
     private var bottomDelta = 0.0
 
-    private var index = 0
+    var index = 0
 
     private var firstNotEmptyChar: Char = EMPTY
     private var firstCharWidth: Float = 0f
@@ -74,22 +74,6 @@ internal class TextColumn(
         //重新计算字符宽度
         measure()
     }
-
-//    fun updateAnimation(progress: Double): PreviousProgress {
-//
-//        //相对于字符序列的进度
-//        val sizeProgress = (changeCharList.size - 1) * progress
-//
-//        //通过进度获得当前字符
-//        index = sizeProgress.toInt()
-//
-//        //求底部偏移值
-//        val k = 1.0 / factor
-//        val b = (1.0 - factor) * k
-//        val offsetPercentage = if (sizeProgress - index >= 1.0 - factor) (sizeProgress - index) * k - b else 0.0
-//
-//        return onAnimationUpdate(index, offsetPercentage, progress)
-//    }
 
     fun onAnimationUpdate(
             currentIndex: Int,
