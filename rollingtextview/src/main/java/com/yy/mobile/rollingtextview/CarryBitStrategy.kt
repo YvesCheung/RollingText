@@ -146,7 +146,7 @@ open class CarryBitStrategy : SimpleCharOrderStrategy() {
                     last = last
             ) to determineDirection()
         }
-        return Strategy.NormalAnimation.findCharOrder(sourceText, targetText, index, charPool)
+        throw IllegalStateException("CarryBitStrategy is in a illegal state, check it's lifecycle")
     }
 
     open fun circularList(

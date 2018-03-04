@@ -246,7 +246,7 @@ class RollingTextView : View {
             }
         } else {
             val originalStrategy = charStrategy
-            charStrategy = Strategy.NoAnimation
+            charStrategy = Strategy.NoAnimation()
             textManager.setText(text)
             charStrategy = originalStrategy
 

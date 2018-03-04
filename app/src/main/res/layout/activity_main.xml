@@ -24,6 +24,7 @@
         android:text="abc"
         android:textSize="40sp" />
 
+
     <com.yy.mobile.rollingtextview.RollingTextView
         android:id="@+id/rollingTextView"
         android:layout_width="wrap_content"
@@ -34,16 +35,127 @@
         android:gravity="center"
         android:text="0"
         android:textColor="#ffff00ff"
-        android:textSize="40sp"
+        android:textSize="35sp"
         android:textStyle="italic"
         app:duration="300" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/rollingTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="50dp"
+        android:layout_toLeftOf="@+id/rollingTextView"
+        android:gravity="start|center_vertical"
+        android:padding="10dp"
+        android:text="Normal"
+        android:textSize="14sp" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/rollingTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rollingTextView"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#ffff00ff"
+        android:textSize="35sp"
+        android:textStyle="italic" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rollingTextView2"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:layout_toLeftOf="@+id/rollingTextView2"
+        android:gravity="start|center_vertical"
+        android:padding="10dp"
+        android:text="SameDirection"
+        android:textSize="14sp" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/rollingTextView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rollingTextView2"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#ffff00ff"
+        android:textSize="35sp"
+        android:textStyle="italic" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rollingTextView3"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="50dp"
+        android:layout_toLeftOf="@+id/rollingTextView3"
+        android:gravity="start|center_vertical"
+        android:padding="10dp"
+        android:text="CarryBit"
+        android:textSize="14sp" />
 
     <com.yy.mobile.rollingtextview.RollingTextView
         android:id="@+id/carryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rollingTextView"
+        android:layout_below="@+id/rollingTextView3"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:textSize="30sp" />
+
+    <LinearLayout
+        android:id="@+id/charOrderExampleLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/carryTextView"
+        android:layout_marginTop="20dp">
+
+        <com.yy.mobile.rollingtextview.RollingTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="charOrder：[abcdefg]" />
+
+        <com.yy.mobile.rollingtextview.RollingTextView
+            android:id="@+id/charOrderExample1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/charOrderExampleLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/charOrderExampleLayout1">
+
+        <com.yy.mobile.rollingtextview.RollingTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="charOrder：[adg]" />
+
+        <com.yy.mobile.rollingtextview.RollingTextView
+            android:id="@+id/charOrderExample2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </RelativeLayout>
