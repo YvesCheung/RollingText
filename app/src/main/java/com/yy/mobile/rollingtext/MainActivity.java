@@ -51,12 +51,11 @@ public class MainActivity extends AppCompatActivity {
 //                });
 
         final RollingTextView carryView = findViewById(R.id.carryTextView);
-        carryView.setAnimationDuration(10000L);
-        carryView.addCharOrder(CharOrder.Alphabet);
+        carryView.setAnimationDuration(13000L);
         carryView.addCharOrder(CharOrder.Number);
-        carryView.setCharStrategy(Strategy.NonZeroFirstCarryBitAnimation);
-        carryView.setText("1");
-        carryView.setText("100");
+        carryView.setCharStrategy(Strategy.CarryBitAnimation);
+        carryView.setText("0");
+        //carryView.setText("1290");
 //        carryView.addAnimatorListener(new AnimatorListenerAdapter() {
 //            @Override
 //            public void onAnimationEnd(Animator animation) {

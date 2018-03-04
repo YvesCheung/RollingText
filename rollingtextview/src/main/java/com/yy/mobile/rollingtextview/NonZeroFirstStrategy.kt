@@ -25,18 +25,19 @@ open class NonZeroFirstStrategy(private val strategy: CharOrderStrategy) : CharO
 
         val (list, direction) = strategy.findCharOrder(sourceText, targetText, index, charPool)
 
+        val maxLen = Math.max(sourceText.length, targetText.length)
         val firstIdx = firstZeroAfterEmpty(list)
         val lastIdx = lastZeroBeforeEmpty(list)
         var replaceFirst = false
         var replaceLast = false
 
-        if (sourceZeroFirst && firstIdx != -1) {
+        if (sourceZeroFirst && firstIdx != -1 && index != maxLen - 1) {
             replaceFirst = true
         } else {
             sourceZeroFirst = false
         }
 
-        if (targetZeroFirst && lastIdx != -1) {
+        if (targetZeroFirst && lastIdx != -1 && index != maxLen - 1) {
             replaceLast = true
         } else {
             targetZeroFirst = false

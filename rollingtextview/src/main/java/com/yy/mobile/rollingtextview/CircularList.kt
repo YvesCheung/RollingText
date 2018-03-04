@@ -1,5 +1,7 @@
 package com.yy.mobile.rollingtextview
 
+import android.util.Log
+
 /**
  * Created by 张宇 on 2018/2/27.
  * E-mail: zhangyu4@yy.com
@@ -23,8 +25,13 @@ class CircularList<T> @JvmOverloads constructor(
     private val rawSize = list.size
 
     override fun get(index: Int): T {
-        val rawIndex = (index + startIndex) % rawSize
-        return list[rawIndex]
+        try {
+            val rawIndex = (index + startIndex) % rawSize
+            return list[rawIndex]
+        } catch (e: ArithmeticException) {
+            Log.i("zycheck", "1")
+            throw e
+        }
     }
 
     override fun isEmpty() = size <= 0

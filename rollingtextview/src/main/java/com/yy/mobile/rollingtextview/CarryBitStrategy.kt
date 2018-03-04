@@ -1,5 +1,7 @@
 package com.yy.mobile.rollingtextview
 
+import android.util.Log
+
 /**
  * Created by 张宇 on 2018/3/4.
  * E-mail: zhangyu4@yy.com
@@ -40,7 +42,8 @@ open class CarryBitStrategy : SimpleCharOrderStrategy() {
                 tgtChar = targetText[tIdx]
             }
             val iterable = charPool.find { it.contains(srcChar) && it.contains(tgtChar) }
-                    ?: listOf(TextManager.EMPTY)
+                    ?: throw IllegalStateException("the char $srcChar or $tgtChar cannot be found in the charPool," +
+                            "please addCharOrder() before use")
             charOrderList.add(iterable)
             srcArray[index] = Math.max(iterable.indexOf(srcChar) - 1, -1)
             tgtArray[index] = Math.max(iterable.indexOf(tgtChar) - 1, -1)
@@ -95,11 +98,24 @@ open class CarryBitStrategy : SimpleCharOrderStrategy() {
             val preStartIndex = Math.max(srcIndex[columnIndex + 1], 0)
             val preCarry = charOrders[columnIndex + 1].size - 1
             val preCurrentIndex = previousProgress.currentIndex
-            val nextStartIndex = (preCurrentIndex + preStartIndex) / preCarry
-            return if ((preCurrentIndex + preStartIndex) % preCarry == 0) {
-                NextProgress(nextStartIndex, previousProgress.offsetPercentage, previousProgress.progress)
+            val nextStartIndex = if (toBigger) {
+                (preCurrentIndex + preStartIndex) / preCarry
             } else {
-                NextProgress(nextStartIndex, 0.0, previousProgress.progress)
+                (preCurrentIndex - preStartIndex - 1 + preCarry) / preCarry
+            }
+            val upgrade = if (toBigger) {
+                (preCurrentIndex + preStartIndex + 1) % preCarry == 0
+            } else {
+                (preCurrentIndex - preStartIndex) % preCarry == 0
+            }
+            return if (upgrade) {
+                NextProgress(nextStartIndex, previousProgress.offsetPercentage, previousProgress.progress).also {
+                    Log.i("zycheck$columnIndex", "$preCurrentIndex $preStartIndex $preCarry $it")
+                }
+            } else {
+                NextProgress(nextStartIndex, 0.0, previousProgress.progress).also {
+                    Log.i("zycheck$columnIndex", "$preCurrentIndex $preStartIndex $preCarry $it")
+                }
             }
         }
         return super.nextProgress(previousProgress, columnIndex, columns, charIndex)

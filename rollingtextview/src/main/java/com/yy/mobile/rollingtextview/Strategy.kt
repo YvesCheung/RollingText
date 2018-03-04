@@ -47,10 +47,7 @@ object Strategy {
     }
 
     @JvmField
-    val CarryBitAnimation: CharOrderStrategy = CarryBitStrategy()
-
-    @JvmField
-    val NonZeroFirstCarryBitAnimation: CharOrderStrategy = NonZeroFirstStrategy(CarryBitAnimation)
+    val CarryBitAnimation: CharOrderStrategy = NonZeroFirstStrategy(CarryBitStrategy())
 
     @JvmStatic
     fun NonZeroFirstAnimation(orderStrategy: CharOrderStrategy): CharOrderStrategy =
