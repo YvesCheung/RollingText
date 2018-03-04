@@ -1,7 +1,5 @@
 package com.yy.mobile.rollingtextview
 
-import android.util.Log
-
 /**
  * Created by 张宇 on 2018/3/4.
  * E-mail: zhangyu4@yy.com
@@ -109,13 +107,9 @@ open class CarryBitStrategy : SimpleCharOrderStrategy() {
                 (preCurrentIndex - preStartIndex) % preCarry == 0
             }
             return if (upgrade) {
-                NextProgress(nextStartIndex, previousProgress.offsetPercentage, previousProgress.progress).also {
-                    Log.i("zycheck$columnIndex", "$preCurrentIndex $preStartIndex $preCarry $it")
-                }
+                NextProgress(nextStartIndex, previousProgress.offsetPercentage, previousProgress.progress)
             } else {
-                NextProgress(nextStartIndex, 0.0, previousProgress.progress).also {
-                    Log.i("zycheck$columnIndex", "$preCurrentIndex $preStartIndex $preCarry $it")
-                }
+                NextProgress(nextStartIndex, 0.0, previousProgress.progress)
             }
         }
         return super.nextProgress(previousProgress, columnIndex, columns, charIndex)
