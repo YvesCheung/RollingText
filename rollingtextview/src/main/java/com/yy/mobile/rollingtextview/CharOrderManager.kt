@@ -28,7 +28,9 @@ internal class CharOrderManager {
     fun beforeCharOrder(sourceText: CharSequence, targetText: CharSequence) =
             charStrategy.beforeCompute(sourceText, targetText, charOrderList)
 
-
     fun afterCharOrder(sourceText: CharSequence, targetText: CharSequence) =
             charStrategy.afterCompute(sourceText, targetText, charOrderList)
+
+    fun getProgress(previousProgress: PreviousProgress, index: Int, size: Int, charList: List<Char>) =
+            charStrategy.nextProgress(previousProgress, index, size, charList)
 }

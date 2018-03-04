@@ -1,5 +1,7 @@
 package com.yy.mobile.rollingtextview
 
+import com.yy.mobile.rollingtextview.TextManager.Companion.EMPTY
+
 /**
  * Created by 张宇 on 2018/2/28.
  * E-mail: zhangyu4@yy.com
@@ -62,7 +64,7 @@ object Strategy {
      */
     @Suppress("FunctionName")
     @JvmStatic
-    fun SameDirectionAnimation(direction: Direction): CharOrderStrategy = object : CharOrderStrategy {
+    fun SameDirectionAnimation(direction: Direction): CharOrderStrategy = object : SimpleCharOrderStrategy() {
 
         override fun findCharOrder(
                 sourceText: CharSequence,
@@ -75,128 +77,253 @@ object Strategy {
     }
 
     @JvmField
-    val CarryBitAnimation: CharOrderStrategy = object : CharOrderStrategy {
+    val CarryBitAnimation: CharOrderStrategy = CarryBitStrategy()
 
-        private var sourceIndex: IntArray? = null
-        private var targetIndex: IntArray? = null
-        private var sourceCumulative: IntArray? = null
-        private var targetCumulative: IntArray? = null
-        private var charOrderList: List<Collection<Char>>? = null
-        private var toBigger: Boolean = true
-        private var direction: Direction = Direction.SCROLL_DOWN
+    @JvmField
+    val NonZeroFirstCarryBitAnimation: CharOrderStrategy = NonZeroFirstStrategy(CarryBitAnimation)
 
-        override fun beforeCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {
+    @JvmStatic
+    fun NonZeroFirstAnimation(orderStrategy: CharOrderStrategy): CharOrderStrategy =
+            NonZeroFirstAnimation(orderStrategy)
+}
 
-            if (sourceText.length > 10 || targetText.length > 10) {
-                throw IllegalStateException("your text is too long, it may overflow the integer calculation." +
-                        " please use other animation strategy.")
-            }
+@Suppress("MemberVisibilityCanBePrivate")
+open class CarryBitStrategy : SimpleCharOrderStrategy() {
 
-            val maxLen = Math.max(sourceText.length, targetText.length)
-            val srcArray = IntArray(maxLen)
-            val tgtArray = IntArray(maxLen)
-            val carryArray = IntArray(maxLen)
-            val charOrderList = mutableListOf<Collection<Char>>()
-            (0 until maxLen).forEach { index ->
-                var srcChar = TextManager.EMPTY
-                var tgtChar = TextManager.EMPTY
-                val sIdx = index - maxLen + sourceText.length
-                val tIdx = index - maxLen + targetText.length
-                if (sIdx >= 0) {
-                    srcChar = sourceText[sIdx]
-                }
-                if (tIdx >= 0) {
-                    tgtChar = targetText[tIdx]
-                }
-                val iterable = charPool.find { it.contains(srcChar) && it.contains(tgtChar) }
-                        ?: listOf(TextManager.EMPTY)
-                charOrderList.add(iterable)
-                srcArray[index] = Math.max(iterable.indexOf(srcChar) - 1, -1)
-                tgtArray[index] = Math.max(iterable.indexOf(tgtChar) - 1, -1)
-                carryArray[index] = iterable.size - 1
-            }
+    protected var sourceIndex: IntArray? = null
+    protected var targetIndex: IntArray? = null
+    protected var sourceCumulative: IntArray? = null
+    protected var targetCumulative: IntArray? = null
+    protected var charOrderList: List<Collection<Char>>? = null
+    protected var toBigger: Boolean = true
 
-            val sourceCumulative = IntArray(maxLen)
-            val targetCumulative = IntArray(maxLen)
-            var srcTotal = 0
-            var tgtTotal = 0
-            var carry = 0
-            (0 until maxLen).forEach { idx ->
-                srcTotal = Math.max(srcArray[idx], 0) + carry * srcTotal
-                tgtTotal = Math.max(tgtArray[idx], 0) + carry * tgtTotal
-                carry = carryArray[idx]
-                sourceCumulative[idx] = srcTotal
-                targetCumulative[idx] = tgtTotal
-            }
+    override fun beforeCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {
 
-            this.sourceIndex = srcArray
-            this.targetIndex = tgtArray
-            this.sourceCumulative = sourceCumulative
-            this.targetCumulative = targetCumulative
-            this.charOrderList = charOrderList
-            this.toBigger = srcTotal < tgtTotal
-            this.direction = if (srcTotal > tgtTotal) Direction.SCROLL_UP else Direction.SCROLL_DOWN
+        if (sourceText.length > 10 || targetText.length > 10) {
+            throw IllegalStateException("your text is too long, it may overflow the integer calculation." +
+                    " please use other animation strategy.")
         }
 
-        override fun afterCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {
-            sourceCumulative = null
-            targetCumulative = null
-            charOrderList = null
-            sourceIndex = null
-            targetIndex = null
-        }
-
-        override fun findCharOrder(
-                sourceText: CharSequence,
-                targetText: CharSequence,
-                index: Int,
-                charPool: CharPool
-        ): Pair<List<Char>, Direction> {
-
-            val srcIndex = sourceIndex
-            val tgtIndex = targetIndex
-            val srcCumulate = sourceCumulative
-            val tgtCumulate = targetCumulative
-            val charOrders = charOrderList
-            if (srcCumulate != null && tgtCumulate != null
-                    && charOrders != null && srcIndex != null && tgtIndex != null) {
-
-                val orderList = charOrders[index].filterIndexed { i, _ -> i > 0 }
-
-                val size = Math.abs(srcCumulate[index] - tgtCumulate[index]) + 1
-                var first: Char? = null
-                var last: Char? = null
-                if (srcIndex[index] == -1) first = TextManager.EMPTY
-                if (tgtIndex[index] == -1) last = TextManager.EMPTY
-                return extraCircularList(
-                        rawList = determineCharOrder(orderList),
-                        size = size,
-                        firstIndex = Math.max(srcIndex[index], 0),
-                        first = first,
-                        last = last
-                ) to determineDirection()
+        val maxLen = Math.max(sourceText.length, targetText.length)
+        val srcArray = IntArray(maxLen)
+        val tgtArray = IntArray(maxLen)
+        val carryArray = IntArray(maxLen)
+        val charOrderList = mutableListOf<Collection<Char>>()
+        (0 until maxLen).forEach { index ->
+            var srcChar = TextManager.EMPTY
+            var tgtChar = TextManager.EMPTY
+            val sIdx = index - maxLen + sourceText.length
+            val tIdx = index - maxLen + targetText.length
+            if (sIdx >= 0) {
+                srcChar = sourceText[sIdx]
             }
-            return NormalAnimation.findCharOrder(sourceText, targetText, index, charPool)
+            if (tIdx >= 0) {
+                tgtChar = targetText[tIdx]
+            }
+            val iterable = charPool.find { it.contains(srcChar) && it.contains(tgtChar) }
+                    ?: listOf(TextManager.EMPTY)
+            charOrderList.add(iterable)
+            srcArray[index] = Math.max(iterable.indexOf(srcChar) - 1, -1)
+            tgtArray[index] = Math.max(iterable.indexOf(tgtChar) - 1, -1)
+            carryArray[index] = iterable.size - 1
         }
 
-        private fun <T> extraCircularList(
-                rawList: List<T>,
-                size: Int,
-                firstIndex: Int,
-                first: T? = null,
-                last: T? = null): List<T> {
-            val circularList = CircularList(rawList, size, firstIndex)
-            return ExtraList(circularList, first, last)
+        val sourceCumulative = IntArray(maxLen)
+        val targetCumulative = IntArray(maxLen)
+        var srcTotal = 0
+        var tgtTotal = 0
+        var carry = 0
+        (0 until maxLen).forEach { idx ->
+            srcTotal = Math.max(srcArray[idx], 0) + carry * srcTotal
+            tgtTotal = Math.max(tgtArray[idx], 0) + carry * tgtTotal
+            carry = carryArray[idx]
+            sourceCumulative[idx] = srcTotal
+            targetCumulative[idx] = tgtTotal
         }
 
-        fun determineCharOrder(orderList: List<Char>): List<Char> {
-            return if (direction == Direction.SCROLL_UP) {
-                orderList.asReversed()
-            } else {
-                orderList
+        this.sourceIndex = srcArray
+        this.targetIndex = tgtArray
+        this.sourceCumulative = sourceCumulative
+        this.targetCumulative = targetCumulative
+        this.charOrderList = charOrderList
+        this.toBigger = srcTotal < tgtTotal
+    }
+
+    override fun afterCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {
+        sourceCumulative = null
+        targetCumulative = null
+        charOrderList = null
+        sourceIndex = null
+        targetIndex = null
+    }
+
+//    override fun getFactor(sourceText: CharSequence, targetText: CharSequence, index: Int): Double {
+//        //return 1.0
+//        val maxLen = Math.max(sourceText.length, targetText.length)
+//        return Math.pow(0.1, (maxLen - 1 - index).toDouble())
+//    }
+
+//    override fun getProgressInfo(previousProgress: PreviousProgress, index: Int): Double {
+//        val charOrders = charOrderList
+//        val srcIndex = sourceIndex
+//        if (charOrders != null && srcIndex != null) {
+//            if (index == charOrders.size - 1) {
+//                return previousProgress.progress
+//            }
+//            val startIndex = srcIndex[index]
+//            val carry = charOrders[index + 1].size
+//            val charOrder = charOrders[index]
+//            val currentIndex = previousProgress.currentIndex
+//            if ((currentIndex + startIndex) % carry == 0) {
+//
+//            }
+//        }
+//
+//        return previousProgress.progress
+//    }
+
+    override fun findCharOrder(
+            sourceText: CharSequence,
+            targetText: CharSequence,
+            index: Int,
+            charPool: CharPool
+    ): Pair<List<Char>, Direction> {
+
+        val srcIndex = sourceIndex
+        val tgtIndex = targetIndex
+        val srcCumulate = sourceCumulative
+        val tgtCumulate = targetCumulative
+        val charOrders = charOrderList
+        if (srcCumulate != null && tgtCumulate != null
+                && charOrders != null && srcIndex != null && tgtIndex != null) {
+
+            val orderList = charOrders[index].filterIndexed { i, _ -> i > 0 }
+
+            val size = Math.abs(srcCumulate[index] - tgtCumulate[index]) + 1
+            var first: Char? = null
+            var last: Char? = null
+            if (srcIndex[index] == -1) first = TextManager.EMPTY
+            if (tgtIndex[index] == -1) last = TextManager.EMPTY
+            val (list, firstIndex) = determineCharOrder(orderList, Math.max(srcIndex[index], 0))
+            return circularList(
+                    rawList = list,
+                    size = size,
+                    firstIndex = firstIndex,
+                    first = first,
+                    last = last
+            ) to determineDirection()
+        }
+        return Strategy.NormalAnimation.findCharOrder(sourceText, targetText, index, charPool)
+    }
+
+    open fun circularList(
+            rawList: List<Char>,
+            size: Int,
+            firstIndex: Int,
+            first: Char?,
+            last: Char?): List<Char> {
+        val circularList = CircularList(rawList, size, firstIndex)
+        return ExtraList(circularList, first, last)
+    }
+
+    open fun determineCharOrder(orderList: List<Char>, index: Int): Pair<List<Char>, Int> {
+        return if (toBigger) {
+            orderList to index
+        } else {
+            orderList.asReversed() to (orderList.size - 1 - index)
+        }
+    }
+
+    open fun determineDirection(): Direction = if (toBigger) Direction.SCROLL_DOWN else Direction.SCROLL_UP
+}
+
+open class NonZeroFirstStrategy(private val strategy: CharOrderStrategy) : CharOrderStrategy by strategy {
+
+    private var sourceZeroFirst = true
+    private var targetZeroFirst = true
+
+    override fun beforeCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {
+        strategy.beforeCompute(sourceText, targetText, charPool)
+        sourceZeroFirst = true
+        targetZeroFirst = true
+    }
+
+    override fun findCharOrder(
+            sourceText: CharSequence,
+            targetText: CharSequence,
+            index: Int,
+            charPool: CharPool
+    ): Pair<List<Char>, Direction> {
+
+        val (list, direction) = strategy.findCharOrder(sourceText, targetText, index, charPool)
+
+        val firstIdx = firstZeroAfterEmpty(list)
+        val lastIdx = lastZeroBeforeEmpty(list)
+        var replaceFirst = false
+        var replaceLast = false
+
+        if (sourceZeroFirst && firstIdx != -1) {
+            replaceFirst = true
+        } else {
+            sourceZeroFirst = false
+        }
+
+        if (targetZeroFirst && lastIdx != -1) {
+            replaceLast = true
+        } else {
+            targetZeroFirst = false
+        }
+
+        var replaceList = if (replaceFirst && replaceLast) {
+            ReplaceList(list, EMPTY, EMPTY, { firstIdx }, { lastIdx })
+        } else if (replaceFirst) {
+            ReplaceList(list, first = EMPTY, firstReplacePosition = { firstIdx },
+                    lastReplacePosition = { lastIdx })
+        } else if (replaceLast) {
+            ReplaceList(list, last = EMPTY, firstReplacePosition = { firstIdx },
+                    lastReplacePosition = { lastIdx })
+        } else {
+            list
+        }
+
+        replaceList = if (replaceFirst && replaceLast) {
+            CircularList(replaceList, lastIdx - firstIdx + 1, firstIdx)
+        } else if (replaceFirst) {
+            CircularList(replaceList, replaceList.size - firstIdx, firstIdx)
+        } else if (replaceLast) {
+            CircularList(replaceList, lastIdx + 1)
+        } else {
+            replaceList
+        }
+
+        return replaceList to direction
+    }
+
+    private fun firstZeroAfterEmpty(list: List<Char>): Int {
+        for ((idx, c) in list.withIndex()) {
+            if (c == '0') {
+                return idx
+            }
+            if (c != EMPTY) {
+                break
             }
         }
+        return -1
+    }
 
-        fun determineDirection(): Direction = if (toBigger) Direction.SCROLL_DOWN else Direction.SCROLL_UP
+    private fun lastZeroBeforeEmpty(list: List<Char>): Int {
+        val iter = list.listIterator(list.size)
+        var idx = list.size
+        while (iter.hasPrevious()) {
+            val c = iter.previous()
+            idx--
+            if (c == '0') {
+                return idx
+            }
+            if (c != EMPTY) {
+                break
+            }
+        }
+        return -1
     }
 }

@@ -38,6 +38,11 @@ internal class TextColumn(
 
     private var index = 0
 
+    private var firstNotEmptyChar: Char = EMPTY
+    private var firstCharWidth: Float = 0f
+    private var lastNotEmptyChar: Char = EMPTY
+    private var lastCharWidth: Float = 0f
+
     init {
         initChangeCharList()
     }
@@ -45,7 +50,7 @@ internal class TextColumn(
     fun measure() {
         sourceWidth = manager.charWidth(sourceChar, textPaint)
         targetWidth = manager.charWidth(targetChar, textPaint)
-        currentWidth = Math.max(sourceWidth, targetWidth)
+        currentWidth = Math.max(sourceWidth, firstCharWidth)
     }
 
     fun setChangeCharList(charList: List<Char>, dir: Direction) {
@@ -62,37 +67,47 @@ internal class TextColumn(
         if (changeCharList.size < 2) {
             currentChar = targetChar
         }
+        firstNotEmptyChar = changeCharList.firstOrNull { it != EMPTY } ?: EMPTY
+        firstCharWidth = manager.charWidth(firstNotEmptyChar, textPaint)
+        lastNotEmptyChar = changeCharList.lastOrNull { it != EMPTY } ?: EMPTY
+        lastCharWidth = manager.charWidth(lastNotEmptyChar, textPaint)
         //重新计算字符宽度
         measure()
     }
 
-    fun updateAnimation(progress: Float) {
+//    fun updateAnimation(progress: Double): PreviousProgress {
+//
+//        //相对于字符序列的进度
+//        val sizeProgress = (changeCharList.size - 1) * progress
+//
+//        //通过进度获得当前字符
+//        index = sizeProgress.toInt()
+//
+//        //求底部偏移值
+//        val k = 1.0 / factor
+//        val b = (1.0 - factor) * k
+//        val offsetPercentage = if (sizeProgress - index >= 1.0 - factor) (sizeProgress - index) * k - b else 0.0
+//
+//        return onAnimationUpdate(index, offsetPercentage, progress)
+//    }
 
-        //当changeCharList.size大于7位数的时候 有可能使Float溢出 所以要用Double
-        val progressDouble: Double = progress.toDouble()
+    fun onAnimationUpdate(
+            currentIndex: Int,
+            offsetPercentage: Double,
+            progress: Double): PreviousProgress {
 
-        //相对于字符序列的进度
-        val sizeProgress = (changeCharList.size - 1) * progressDouble
+        //当前字符
+        index = currentIndex
+        currentChar = changeCharList[currentIndex]
 
-        //通过进度获得当前字符
-        index = sizeProgress.toInt()
-        currentChar = changeCharList[index]
-
-        //求底部偏移值
-        val offsetPercentage = sizeProgress - index
         //从上一次动画结束时的偏移值开始
-        val additionalDelta = previousBottomDelta * (1f - progress)
+        val additionalDelta = previousBottomDelta * (1.0 - progress)
         bottomDelta = offsetPercentage * manager.textHeight * direction.value + additionalDelta
 
-        //计算当前字符宽度，为当前字符和下一个字符的过渡宽度
-        val charWidth = manager.charWidth(currentChar, textPaint)
-        currentWidth = if (index + 1 < changeCharList.size) {
-            val nextCharWidth = manager.charWidth(changeCharList[index + 1], textPaint)
-//            charWidth + (nextCharWidth - charWidth) * progress
-            Math.max(charWidth, nextCharWidth)
-        } else {
-            charWidth
-        }
+        //计算当前字符宽度，为第一个字符和最后一个字符的过渡宽度
+        currentWidth = (lastCharWidth - firstCharWidth) * progress.toFloat() + firstCharWidth
+
+        return PreviousProgress(index, offsetPercentage, progress, currentChar, currentWidth)
     }
 
     fun onAnimationEnd() {

@@ -42,8 +42,13 @@ internal class TextManager(
     }
 
     fun updateAnimation(progress: Float) {
-        textColumns.forEach {
-            it.updateAnimation(progress)
+        //当changeCharList.size大于7位数的时候 有可能使Float溢出 所以要用Double
+        val initialize = PreviousProgress(0, 0.0, progress.toDouble())
+        textColumns.foldRightIndexed(initialize) { index, column, previousProgress ->
+            val nextProgress = charOrderManager.getProgress(previousProgress,
+                    index, textColumns.size, textColumns[index].changeCharList)
+            column.onAnimationUpdate(nextProgress.currentIndex,
+                    nextProgress.offsetPercentage, nextProgress.progress)
         }
     }
 
@@ -78,7 +83,6 @@ internal class TextManager(
         charOrderManager.beforeCharOrder(sourceText, targetText)
         for (idx in 0 until maxLen) {
             val (list, direction) = charOrderManager.findCharOrder(sourceText, targetText, idx)
-
             if (idx >= maxLen - sourceText.length) {
                 textColumns[idx].setChangeCharList(list, direction)
             } else {
@@ -101,3 +105,17 @@ internal class TextManager(
             field = value
         }
 }
+
+data class PreviousProgress(
+        val currentIndex: Int,
+        val offsetPercentage: Double,
+        val progress: Double,
+        val currentChar: Char = TextManager.EMPTY,
+        val currentWidth: Float = 0f
+)
+
+data class NextProgress(
+        val currentIndex: Int,
+        val offsetPercentage: Double,
+        val progress: Double
+)

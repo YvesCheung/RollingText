@@ -42,6 +42,13 @@ interface CharOrderStrategy {
                       index: Int,
                       charPool: CharPool): Pair<List<Char>, Direction>
 
+
+    fun nextProgress(
+            previousProgress: PreviousProgress,
+            index: Int,
+            size: Int,
+            charList: List<Char>): NextProgress
+
     /**
      * 在滚动动画计算后回调
      *
@@ -60,6 +67,35 @@ interface CharOrderStrategy {
  * a simple strategy template
  */
 abstract class SimpleCharOrderStrategy : CharOrderStrategy {
+
+    override fun beforeCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {}
+
+    override fun afterCompute(sourceText: CharSequence, targetText: CharSequence, charPool: CharPool) {}
+
+    override fun nextProgress(
+            previousProgress: PreviousProgress,
+            index: Int,
+            size: Int,
+            charList: List<Char>): NextProgress {
+
+        val factor = 1.0
+        //相对于字符序列的进度
+        val sizeProgress = (charList.size - 1) * previousProgress.progress
+
+        //通过进度获得当前字符
+        val currentCharIndex = sizeProgress.toInt()
+
+        //求底部偏移值
+        val k = 1.0 / factor
+        val b = (1.0 - factor) * k
+        val offsetPercentage = if (sizeProgress - currentCharIndex >= 1.0 - factor) {
+            (sizeProgress - currentCharIndex) * k - b
+        } else {
+            0.0
+        }
+
+        return NextProgress(currentCharIndex, offsetPercentage, previousProgress.progress)
+    }
 
     override fun findCharOrder(
             sourceText: CharSequence,

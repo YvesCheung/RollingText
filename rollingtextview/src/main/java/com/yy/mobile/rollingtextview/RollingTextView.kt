@@ -239,7 +239,10 @@ class RollingTextView : View {
                 }
                 duration = animationDuration
                 interpolator = animationInterpolator
-                start()
+                //到下一次looper去开始新的动画，解决在onAnimationEnd的时候setText的问题
+                post {
+                    start()
+                }
             }
         } else {
             val originalStrategy = charStrategy
@@ -300,7 +303,7 @@ class RollingTextView : View {
      * [Strategy.SameDirectionAnimation]
      *
      * 进位滚动
-     * [Strategy.CarryBitAnimation]
+     * [Strategy.NonZeroFirstCarryBitAnimation]
      */
     var charStrategy: CharOrderStrategy
         set(value) {
@@ -347,9 +350,9 @@ class RollingTextView : View {
 }
 
 object CharOrder {
-    const val Number = "1234567890"
+    const val Number = "0123456789"
 
-    const val Hex = "123456789ABCDEF0"
+    const val Hex = "0123456789ABCDEF"
 
     const val Binary = "01"
 
