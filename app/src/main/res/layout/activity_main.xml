@@ -11,18 +11,30 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="00:00"
-        android:textSize="20sp"
+        android:textSize="40sp"
         android:textStyle="bold" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/alphaBetView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="abc"
+        android:textSize="40sp" />
 
     <com.yy.mobile.rollingtextview.RollingTextView
         android:id="@+id/rollingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/alphaBetView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="000"
+        android:text="0"
         android:textColor="#ffff00ff"
-        android:textSize="25sp"
+        android:textSize="40sp"
         android:textStyle="italic"
         app:duration="300" />
 
@@ -30,8 +42,8 @@
         android:id="@+id/carryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
+        android:layout_below="@+id/rollingTextView"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
         android:textSize="30sp" />
 </RelativeLayout>

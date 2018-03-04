@@ -39,10 +39,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 2000L, 3000L);
 
-        final RollingTextView timeView = findViewById(R.id.timeView);
-        timeView.setTextSize(20);
-        timeView.setAnimationDuration(300);
 
+        final RollingTextView alphaBetView = findViewById(R.id.alphaBetView);
+        alphaBetView.setAnimationDuration(2000L);
+        alphaBetView.setCharStrategy(Strategy.NormalAnimation);
+        alphaBetView.addCharOrder(CharOrder.Alphabet);
+        alphaBetView.setText("bdz");
+
+
+        final RollingTextView timeView = findViewById(R.id.timeView);
+        timeView.setAnimationDuration(300);
         @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("HH:mm:ss");
         new Timer().schedule(new TimerTask() {
             @Override
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 timeView.setText(format.format(new Date()));
             }
         }, 0, 1000L);
+
 
         final RollingTextView carryView = findViewById(R.id.carryTextView);
         carryView.setAnimationDuration(13000L);
