@@ -4,8 +4,6 @@
 
 ![preview][1]
 
-[![](https://jitpack.io/#YvesCheung/RollingText/)](https://jitpack.io/#YvesCheung/RollingText/)
-
 特性
 ========
 
