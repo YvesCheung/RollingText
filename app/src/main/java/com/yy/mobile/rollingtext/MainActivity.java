@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 2000L);
 
+
         final RollingTextView alphaBetView = findViewById(R.id.alphaBetView);
         alphaBetView.setAnimationDuration(2000L);
         alphaBetView.setCharStrategy(Strategy.NormalAnimation());
@@ -120,14 +121,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 0, 1000L);
 
-
         final RollingTextView carryView = findViewById(R.id.carryTextView);
         carryView.setAnimationDuration(13000L);
         carryView.addCharOrder(CharOrder.Number);
         carryView.setCharStrategy(Strategy.CarryBitAnimation());
         carryView.setText("0");
         carryView.setText("1290");
-
 
         final RollingTextView charOrder1 = findViewById(R.id.charOrderExample1);
         charOrder1.setAnimationDuration(4000L);
