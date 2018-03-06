@@ -5,14 +5,14 @@
 ![preview][1]
 
 特性
-========
+---
 
 - 使用简单，API与TextView类似，setText方法可带有上下滚动的动画
 - 支持xml设置android:textSize/android:textColor/android:textStyle等常用属性
 - 可高度定制，支持任何单个字符的上下滚动变化效果
 
 动画效果
-========
+-------
 
 ### 策略
 
@@ -53,7 +53,7 @@ alphaBetView.addCharOrder(CharOrder.Binary);
 更多的想法可自行实现 ``CharOrderStrategy`` 接口，定制自己的动画效果
 
 配置
-========
+---
 
 1. 在App根目录的project build.gradle文件中添加：
 
@@ -75,7 +75,7 @@ alphaBetView.addCharOrder(CharOrder.Binary);
     ```
 
 使用
-=========
+---
 
 ### xml设置
 
@@ -113,10 +113,11 @@ rollingTextView.setText("i am a text");
 
 >  欢迎使用！有疑问可联系我和提交issue！
 
-License
-==========
 
-    Copyright 2018 YvesChueng
+License
+-------
+
+    Copyright 2018 Yves Cheung
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
