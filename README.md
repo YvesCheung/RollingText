@@ -129,7 +129,7 @@ rollingTextView.setText("i am a text");
    	limitations under the License.
     
     
-  [1]: https://github.com/YvesCheung/RollingText/blob/master/ezgif.com-optimize.gif
-  [2]: https://github.com/YvesCheung/RollingText/blob/master/StrategyCompare.gif
-  [3]: https://github.com/YvesCheung/RollingText/blob/master/charOrderCompare.gif
-  [4]: https://github.com/YvesCheung/RollingText/blob/1.2.0/stickyFactor.gif
+  [1]: https://raw.githubusercontent.com/YvesCheung/RollingText/master/ezgif.com-optimize.gif
+  [2]: https://raw.githubusercontent.com/YvesCheung/RollingText/master/StrategyCompare.gif
+  [3]: https://raw.githubusercontent.com/YvesCheung/RollingText/master/charOrderCompare.gif
+  [4]: https://raw.githubusercontent.com/YvesCheung/RollingText/master/stickyFactor.gif
