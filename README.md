@@ -1,5 +1,7 @@
 # RollingTextView
 
+标签： Andorid 滚动动画 数字动画 文本特效
+
 ---
 
 ![preview][1]
@@ -11,8 +13,30 @@
 - 支持xml设置android:textSize/android:textColor/android:textStyle等常用属性
 - 可高度定制，支持任何单个字符的上下滚动变化效果
 
+配置
+========
+
+1. 在App根目录的project build.gradle文件中添加：
+
+    ```groovy
+    allprojects {
+	 	repositories {
+	 		...
+			maven { url 'https://jitpack.io' }
+	 	}
+	}
+	```
+	
+2. 在对应的module 中添加依赖：
+
+    ```groovy
+    dependencies {  
+	    compile 'com.github.YvesCheung:RollingText:1.1.0'
+	}
+    ```
+
 使用方法
-=======
+========
 
 ### xml设置
 
@@ -53,9 +77,9 @@ rollingTextView.setText("i am a text");
 可以通过设置不同的动画策略来实现不同的滚动效果
 
 > 默认的动画是小字符向大字符变化时向下滚动，反之向上滚动
-
+>
 > 也可以指定让滚动向同一个方向
-
+>
 > 进位动画可以从低位数字进位到高位数字，不止是适用于十进制。但只能用于长度小于10的字符串防止溢出整型数。只能用于包含0的字符序列，否则进位的计算将没有意义。 
 
 ![StrategyCompare][2]
