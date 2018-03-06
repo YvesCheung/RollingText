@@ -1,4 +1,8 @@
-package com.yy.mobile.rollingtextview
+package com.yy.mobile.rollingtextview.strategy
+
+import com.yy.mobile.rollingtextview.*
+import com.yy.mobile.rollingtextview.util.CircularList
+import com.yy.mobile.rollingtextview.util.ReplaceList
 
 /**
  * Created by 张宇 on 2018/3/4.

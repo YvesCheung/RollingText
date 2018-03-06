@@ -18,6 +18,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
+import com.yy.mobile.rollingtextview.strategy.CharOrderStrategy
+import com.yy.mobile.rollingtextview.strategy.Strategy
 
 /**
  * Created by 张宇 on 2018/2/26.

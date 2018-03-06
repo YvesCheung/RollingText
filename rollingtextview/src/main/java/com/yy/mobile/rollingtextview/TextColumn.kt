@@ -3,6 +3,7 @@ package com.yy.mobile.rollingtextview
 import android.graphics.Canvas
 import android.graphics.Paint
 import com.yy.mobile.rollingtextview.TextManager.Companion.EMPTY
+import com.yy.mobile.rollingtextview.strategy.Direction
 
 /**
  * Created by 张宇 on 2018/2/26.

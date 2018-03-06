@@ -1,4 +1,8 @@
-package com.yy.mobile.rollingtextview
+package com.yy.mobile.rollingtextview.strategy
+
+import com.yy.mobile.rollingtextview.NextProgress
+import com.yy.mobile.rollingtextview.PreviousProgress
+import com.yy.mobile.rollingtextview.TextManager
 
 /**
  * Created by 张宇 on 2018/2/28.

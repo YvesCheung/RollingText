@@ -1,4 +1,4 @@
-package com.yy.mobile.rollingtextview
+package com.yy.mobile.rollingtextview.util
 
 import android.util.Log
 

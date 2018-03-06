@@ -1,5 +1,8 @@
 package com.yy.mobile.rollingtextview
 
+import com.yy.mobile.rollingtextview.strategy.CharOrderStrategy
+import com.yy.mobile.rollingtextview.strategy.Direction
+import com.yy.mobile.rollingtextview.strategy.Strategy
 import java.util.*
 
 /**

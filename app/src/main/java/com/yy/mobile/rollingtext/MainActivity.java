@@ -9,9 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.yy.mobile.rollingtextview.CharOrder;
-import com.yy.mobile.rollingtextview.Direction;
 import com.yy.mobile.rollingtextview.RollingTextView;
-import com.yy.mobile.rollingtextview.Strategy;
+import com.yy.mobile.rollingtextview.strategy.Direction;
+import com.yy.mobile.rollingtextview.strategy.Strategy;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -67,6 +67,28 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 carryBit.setText(list.get(idx++ % list.size()));
                 handler.postDelayed(this, 3000L);
+            }
+        }, 2000L);
+
+        final RollingTextView stickyText = findViewById(R.id.stickyText);
+        stickyText.setAnimationDuration(3000L);
+        stickyText.addCharOrder("0123456789abcdef");
+        stickyText.setCharStrategy(Strategy.StickyAnimation(0.9f));
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                stickyText.setText("eeee");
+            }
+        }, 2000L);
+
+        final RollingTextView stickyText2 = findViewById(R.id.stickyText2);
+        stickyText2.setAnimationDuration(3000L);
+        stickyText2.addCharOrder("0123456789abcdef");
+        stickyText2.setCharStrategy(Strategy.StickyAnimation(0.2f));
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                stickyText2.setText("eeee");
             }
         }, 2000L);
 

@@ -1,4 +1,4 @@
-package com.yy.mobile.rollingtextview
+package com.yy.mobile.rollingtextview.util
 
 /**
  * Created by 张宇 on 2018/3/4.
