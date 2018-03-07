@@ -28,7 +28,7 @@ Different rolling effects can be achieved by setting different animation strateg
 >
 > You can also specify that rolling to the same direction
 >
-> The carry animation can be worked from low digit to high number, not only for decimal. But it can only be used for strings with a length less than 10 to prevent integer from overflow. It can only be used for a sequence of characters containing 0, otherwise the calculation of the carry will be meaningless.
+> The carry animation can be worked from low digit to high digit, not only for decimal. But it can only be used for strings with a length less than 10 to prevent integer from overflow. It can only be used for a sequence of characters containing 0, otherwise the calculation of the carry will be meaningless.
 
 ![StrategyCompare][2]
 
