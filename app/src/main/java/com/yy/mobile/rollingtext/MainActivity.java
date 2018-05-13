@@ -114,12 +114,13 @@ public class MainActivity extends AppCompatActivity {
         final RollingTextView timeView = findViewById(R.id.timeView);
         timeView.setAnimationDuration(300);
         @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("HH:mm:ss");
-        new Timer().schedule(new TimerTask() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 timeView.setText(format.format(new Date()));
+                handler.postDelayed(this, 1000L);
             }
-        }, 0, 1000L);
+        });
 
         final RollingTextView carryView = findViewById(R.id.carryTextView);
         carryView.setAnimationDuration(13000L);

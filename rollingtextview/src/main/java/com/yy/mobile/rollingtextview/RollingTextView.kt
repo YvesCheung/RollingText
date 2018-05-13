@@ -102,6 +102,7 @@ class RollingTextView : View {
 
         animationDuration = arr.getInt(R.styleable.RollingTextView_duration, animationDuration.toInt()).toLong()
 
+        textPaint.isAntiAlias = true
         if (shadowColor != 0) {
             textPaint.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor)
         }

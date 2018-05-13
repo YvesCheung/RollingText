@@ -21,6 +21,10 @@
         android:layout_below="@id/timeView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:shadowColor="#ff44ffdd"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius="10"
         android:text="abc"
         android:textSize="40sp" />
 
