@@ -95,9 +95,10 @@ Usage
     android:textColor="#1d1d1d"
     android:textStyle="bold"
     android:gravity="center"
-    android:shadowColor="#ffdd00"
-    android:shadowDx="4dp"
-    android:shadowDy="4dp"/>
+    android:shadowColor="#ff44ffdd"
+    android:shadowDx="10"
+    android:shadowDy="10"
+    android:shadowRadius="10"/>
 ```
 
 ### write in java code
