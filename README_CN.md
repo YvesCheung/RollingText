@@ -4,39 +4,33 @@
 
 ![preview][1]
 
-[![build](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
+特性
+======
 
-[中文版README](README_CN.md)
+- 使用简单，API与TextView类似，setText方法可带有上下滚动的动画
+- 支持xml设置android:textSize/android:textColor/android:textStyle等常用属性
+- 可高度定制，支持任何单个字符的上下滚动变化效果
 
-Features
-========
+动画效果
+=======
 
-- easy to use, API is similar to TextView, and the setText method can be animated with up and down rolling
+### 策略
 
-- support XML to set up common properties such as android:textSize/ android:textColor/ android:textStyle
+可以通过设置不同的动画策略来实现不同的滚动效果
 
-- highly customizable to support animation effects of any single character
-
-Animation
-========
-
-### Strategy
-
-Different rolling effects can be achieved by setting different animation strategies
-
-> The default animation is to roll down when small characters change to large characters, and vice versa.
+> 默认的动画是小字符向大字符变化时向下滚动，反之向上滚动
 >
-> You can also specify that rolling to the same direction
+> 也可以指定让滚动向同一个方向
 >
-> The carry animation can be worked from low digit to high digit, not only for decimal. But it can only be used for strings with a length less than 10 to prevent integer from overflow. It can only be used for a sequence of characters containing 0, otherwise the calculation of the carry will be meaningless.
+> 进位动画可以从低位数字进位到高位数字，不止是适用于十进制。但只能用于长度小于10的字符串防止溢出整型数。只能用于包含0的字符序列，否则进位的计算将没有意义。 
 
 ![StrategyCompare][2]
 
-### The order of characters
+### 字符的顺序
 
-- The sequence of characters needs to be set up to tell ``RollingTextView`` how to change from the original character to the target character
-- The common sequence of characters can be found in the ``CharOrder`` constant class
-- When multiple orders are added and all are applicable to the target character and the original character, the precedence of the previous setting will be higher
+- 字符的顺序需要自行设置，告诉RollingTextView怎么从原字符滚动变化到目标字符
+- 常用的字符顺序可以在 ``CharOrder`` 常量中找到
+- 当添加多个顺序时且都适用于目标字符和原字符，前面设置的优先级会更高
 
 ```java
 alphaBetView.addCharOrder(CharOrder.Alphabet);
@@ -48,20 +42,20 @@ alphaBetView.addCharOrder(CharOrder.Binary);
 
 ![charOrderCompare][3]
 
-### Rolling fluency
+### 滚动流畅度
 
-> The fluency of the animation can be adjusted by passing a ``factor`` parameter. The closer the ``factor`` value is to 0, the rolling will appear to be more hopping. And the closer the ``factor`` value is to 1, the more smooth the rolling is.
+> 可以通过传递一个 ``factor`` 参数来调整动画的流畅度。 ``factor`` 值越接近0.0，滚动会显得比较跳跃。而 ``factor`` 值越接近1.0，滚动越平滑
 
 ![stickyFactor][4]
 
-### other
+### 其他
 
-More ideas can be implemented on the ``CharOrderStrategy`` interface to customize your own animation effects
+更多的想法可自行实现 ``CharOrderStrategy`` 接口，定制自己的动画效果
 
-Download
-========
+配置
+=====
 
-1. Add in the root project build.gradle file：
+1. 在App根目录的project build.gradle文件中添加：
 
     ```groovy
     allprojects {
@@ -72,7 +66,7 @@ Download
 	}
 	```
 	
-2. Add dependency in the appropriate module
+2. 在对应的module 中添加依赖：
 
     ```groovy
     dependencies {  
@@ -80,10 +74,10 @@ Download
 	}
     ```
 
-Usage
-=========
+使用
+=====
 
-### XML settings
+### xml设置
 
 ```xml
 <com.yy.mobile.rollingtextview.RollingTextView
@@ -100,7 +94,7 @@ Usage
     android:shadowDy="4dp"/>
 ```
 
-### write in java code
+### 代码设置
 
 ```java
 final RollingTextView rollingTextView = findViewById(R.id.alphaBetView);
@@ -117,7 +111,7 @@ rollingTextView.addAnimatorListener(new AnimatorListenerAdapter() {
 rollingTextView.setText("i am a text");
 ```
 
-License
+许可证
 ========
 
 	Copyright 2018 Yves Cheung
@@ -133,8 +127,8 @@ License
    	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    	See the License for the specific language governing permissions and
    	limitations under the License.
-
-
+    
+    
   [1]: https://raw.githubusercontent.com/YvesCheung/RollingText/master/ezgif.com-optimize.gif
   [2]: https://raw.githubusercontent.com/YvesCheung/RollingText/master/StrategyCompare.gif
   [3]: https://raw.githubusercontent.com/YvesCheung/RollingText/master/charOrderCompare.gif
