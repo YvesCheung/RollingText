@@ -1,6 +1,8 @@
 package com.yy.mobile.rollingtextview.strategy
 
-import com.yy.mobile.rollingtextview.*
+import com.yy.mobile.rollingtextview.NextProgress
+import com.yy.mobile.rollingtextview.PreviousProgress
+import com.yy.mobile.rollingtextview.TextManager
 import com.yy.mobile.rollingtextview.util.CircularList
 import com.yy.mobile.rollingtextview.util.ExtraList
 
@@ -11,7 +13,7 @@ import com.yy.mobile.rollingtextview.util.ExtraList
  */
 
 @Suppress("MemberVisibilityCanBePrivate")
-open class CarryBitStrategy : SimpleCharOrderStrategy() {
+open class CarryBitStrategy(val direction: Direction) : SimpleCharOrderStrategy() {
 
     protected var sourceIndex: IntArray? = null
     protected var targetIndex: IntArray? = null
@@ -171,5 +173,5 @@ open class CarryBitStrategy : SimpleCharOrderStrategy() {
         }
     }
 
-    open fun determineDirection(): Direction = if (toBigger) Direction.SCROLL_DOWN else Direction.SCROLL_UP
+    open fun determineDirection() = direction
 }

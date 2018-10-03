@@ -18,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         final RollingTextView carryBit = findViewById(R.id.rollingTextView3);
         carryBit.addCharOrder(CharOrder.Number);
         carryBit.setAnimationDuration(2000L);
-        carryBit.setCharStrategy(Strategy.CarryBitAnimation());
+        carryBit.setCharStrategy(Strategy.CarryBitAnimation(Direction.SCROLL_UP));
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         final RollingTextView carryView = findViewById(R.id.carryTextView);
         carryView.setAnimationDuration(13000L);
         carryView.addCharOrder(CharOrder.Number);
-        carryView.setCharStrategy(Strategy.CarryBitAnimation());
+        carryView.setCharStrategy(Strategy.CarryBitAnimation(Direction.SCROLL_DOWN));
         carryView.setText("0");
         carryView.setText("1290");
 

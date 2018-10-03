@@ -48,7 +48,7 @@ object Strategy {
      * the animation starts with the rightmost digits and works to the left.
      */
     @JvmStatic
-    fun CarryBitAnimation(): CharOrderStrategy = NonZeroFirstStrategy(CarryBitStrategy())
+    fun CarryBitAnimation(direction: Direction = Direction.SCROLL_DOWN): CharOrderStrategy = NonZeroFirstStrategy(CarryBitStrategy(direction))
 
     /**
      * 装饰者模式，使动画最高位数字不为0
