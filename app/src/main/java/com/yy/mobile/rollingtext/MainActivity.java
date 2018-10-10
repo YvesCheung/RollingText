@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,6 +68,22 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(this, 3000L);
             }
         }, 2000L);
+
+        final RollingTextView countDown = findViewById(R.id.rollingTextView4);
+        countDown.addCharOrder(CharOrder.Number);
+        countDown.addCharOrder(":");
+        countDown.setAnimationDuration(500L);
+        countDown.setAnimationInterpolator(new AccelerateDecelerateInterpolator());
+        countDown.setCharStrategy(Strategy.TimeCountDownAnimation(Direction.SCROLL_DOWN));
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Date date = new Date();
+                date.setTime(System.currentTimeMillis());
+                countDown.setText(new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(date));
+                handler.postDelayed(this, 1000L);
+            }
+        });
 
         final RollingTextView stickyText = findViewById(R.id.stickyText);
         stickyText.setAnimationDuration(3000L);

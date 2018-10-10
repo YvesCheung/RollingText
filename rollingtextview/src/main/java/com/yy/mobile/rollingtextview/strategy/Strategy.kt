@@ -69,4 +69,13 @@ object Strategy {
     @JvmStatic
     fun StickyAnimation(factor: Double): CharOrderStrategy =
             StickyStrategy(factor)
+
+    /**
+     * 倒计时动画:
+     * 保持相同顺序
+     *
+     * the animation use for count down, all the character are same direction
+     */
+    @JvmStatic
+    fun TimeCountDownAnimation(direction: Direction): CharOrderStrategy = TimeCountDownStrategy(direction)
 }

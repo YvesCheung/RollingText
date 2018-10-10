@@ -103,11 +103,35 @@
         android:text="CarryBit"
         android:textSize="14sp" />
 
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/rollingTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rollingTextView3"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#ffff00ff"
+        android:textSize="35sp"
+        android:textStyle="italic" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rollingTextView4"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dp"
+        android:layout_toLeftOf="@+id/rollingTextView4"
+        android:gravity="start|center_vertical"
+        android:padding="10dp"
+        android:text="CountDown"
+        android:textSize="14sp" />
+
     <RelativeLayout
         android:id="@+id/stickyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rollingTextView3"
+        android:layout_below="@id/rollingTextView4"
         android:layout_marginTop="10dp">
 
         <com.yy.mobile.rollingtextview.RollingTextView
