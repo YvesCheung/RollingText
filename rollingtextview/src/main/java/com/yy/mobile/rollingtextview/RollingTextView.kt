@@ -31,7 +31,7 @@ import com.yy.mobile.rollingtextview.strategy.Strategy
  * YY: 909017428
  */
 @Suppress("MemberVisibilityCanBePrivate")
-class RollingTextView : View {
+open class RollingTextView : View {
 
     private var lastMeasuredDesiredWidth: Int = 0
     private var lastMeasuredDesiredHeight: Int = 0
@@ -298,6 +298,11 @@ class RollingTextView : View {
                 invalidate()
             }
         }
+
+    override fun getBaseline(): Int {
+        val fontMetrics = textPaint.fontMetrics
+        return (textManager.textHeight / 2 + ((fontMetrics.descent - fontMetrics.ascent) / 2 - fontMetrics.descent)).toInt()
+    }
 
     /**
      * 设置动画滚动策略,如：
