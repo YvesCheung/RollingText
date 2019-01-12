@@ -10,11 +10,14 @@ import java.util.*
  * YY: 909017428
  */
 internal class TextManager(
-        private val textPaint: Paint,
-        private val charOrderManager: CharOrderManager) {
+    private val textPaint: Paint,
+    private val charOrderManager: CharOrderManager
+) {
 
     companion object {
         const val EMPTY: Char = 0.toChar()
+
+        const val FLT_EPSILON: Float = 1.192092896e-07F
     }
 
     private val map: MutableMap<Char, Float> = LinkedHashMap(36)
@@ -49,10 +52,10 @@ internal class TextManager(
         val initialize = PreviousProgress(0, 0.0, progress.toDouble())
         textColumns.foldRightIndexed(initialize) { index, column, previousProgress ->
             val nextProgress = charOrderManager.getProgress(previousProgress, index,
-                    charListColumns, column.index)
+                charListColumns, column.index)
 
             val previous = column.onAnimationUpdate(nextProgress.currentIndex,
-                    nextProgress.offsetPercentage, nextProgress.progress)
+                nextProgress.offsetPercentage, nextProgress.progress)
             previous
         }
     }
@@ -72,12 +75,14 @@ internal class TextManager(
     val currentTextWidth: Float
         get() = textColumns.map { it.currentWidth }.fold(0f) { total, next -> total + next }
 
+    private fun Float.isZero(): Boolean = this < FLT_EPSILON && this > -FLT_EPSILON
+
     fun setText(targetText: CharSequence) {
 
         val itr = textColumns.iterator()
         while (itr.hasNext()) {
             val column = itr.next()
-            if (column.currentWidth.toInt() == 0) {
+            if (column.currentWidth.isZero()) {
                 itr.remove()
             }
         }
@@ -113,15 +118,15 @@ internal class TextManager(
 }
 
 data class PreviousProgress(
-        val currentIndex: Int,
-        val offsetPercentage: Double,
-        val progress: Double,
-        val currentChar: Char = TextManager.EMPTY,
-        val currentWidth: Float = 0f
+    val currentIndex: Int,
+    val offsetPercentage: Double,
+    val progress: Double,
+    val currentChar: Char = TextManager.EMPTY,
+    val currentWidth: Float = 0f
 )
 
 data class NextProgress(
-        val currentIndex: Int,
-        val offsetPercentage: Double,
-        val progress: Double
+    val currentIndex: Int,
+    val offsetPercentage: Double,
+    val progress: Double
 )

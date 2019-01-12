@@ -9,7 +9,11 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Resources
 import android.content.res.TypedArray
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import android.os.Build
 import android.text.TextUtils
 import android.util.AttributeSet
@@ -53,13 +57,13 @@ class RollingTextView : View {
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-            : super(context, attrs, defStyleAttr) {
+        : super(context, attrs, defStyleAttr) {
         init(context, attrs, defStyleAttr, 0)
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int)
-            : super(context, attrs, defStyleAttr, defStyleRes) {
+        : super(context, attrs, defStyleAttr, defStyleRes) {
         init(context, attrs, defStyleAttr, defStyleRes)
     }
 
@@ -71,7 +75,7 @@ class RollingTextView : View {
         var shadowRadius = 0f
         var text = ""
         var textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                12f, context.resources.displayMetrics)
+            12f, context.resources.displayMetrics)
 
         fun applyTypedArray(arr: TypedArray) {
             gravity = arr.getInt(R.styleable.RollingTextView_android_gravity, gravity)
@@ -86,14 +90,14 @@ class RollingTextView : View {
         }
 
         val arr = context.obtainStyledAttributes(attrs, R.styleable.RollingTextView,
-                defStyleAttr, defStyleRes)
+            defStyleAttr, defStyleRes)
 
         val textAppearanceResId = arr.getResourceId(
-                R.styleable.RollingTextView_android_textAppearance, -1)
+            R.styleable.RollingTextView_android_textAppearance, -1)
 
         if (textAppearanceResId != -1) {
             val textAppearanceArr = context.obtainStyledAttributes(
-                    textAppearanceResId, R.styleable.RollingTextView)
+                textAppearanceResId, R.styleable.RollingTextView)
             applyTypedArray(textAppearanceArr)
             textAppearanceArr.recycle()
         }
@@ -154,18 +158,20 @@ class RollingTextView : View {
     override fun onSizeChanged(width: Int, height: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(width, height, oldw, oldh)
         viewBounds.set(paddingLeft, paddingTop, width - paddingRight,
-                height - paddingBottom)
+            height - paddingBottom)
     }
 
     private fun checkForReLayout(): Boolean {
-        val widthChanged = lastMeasuredDesiredWidth != computeDesiredWidth()
-        val heightChanged = lastMeasuredDesiredHeight != computeDesiredHeight()
-
-        if (widthChanged || heightChanged) {
-            requestLayout()
-            return true
-        }
-        return false
+        //        val widthChanged = lastMeasuredDesiredWidth != computeDesiredWidth()
+        //        val heightChanged = lastMeasuredDesiredHeight != computeDesiredHeight()
+        //
+        //        if (widthChanged || heightChanged) {
+        //            requestLayout()
+        //            return true
+        //        }
+        //        return false
+        requestLayout()
+        return true
     }
 
     private fun computeDesiredWidth(): Int {
@@ -306,7 +312,7 @@ class RollingTextView : View {
      * [Strategy.SameDirectionAnimation]
      *
      * 进位滚动
-     * [Strategy.NonZeroFirstCarryBitAnimation]
+     * [Strategy.CarryBitAnimation]
      */
     var charStrategy: CharOrderStrategy
         set(value) {

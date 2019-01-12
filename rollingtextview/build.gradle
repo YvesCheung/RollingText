@@ -23,6 +23,14 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            java {
+                include '**/*.java'
+                include '**/*.kt'
+            }
+        }
+    }
 }
 
 dependencies {
@@ -31,4 +39,18 @@ dependencies {
 
 repositories {
     mavenCentral()
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+task classesJar(type: Jar) {
+    from "$buildDir/intermediates/classes/release"
+}
+
+artifacts {
+    archives classesJar
+    archives sourcesJar
 }

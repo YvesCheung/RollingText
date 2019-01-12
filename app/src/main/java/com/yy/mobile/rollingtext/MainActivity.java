@@ -18,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
                 handler.postDelayed(this, 3000L);
             }
         }, 2000L);
-
 
         final RollingTextView sameDirection = findViewById(R.id.rollingTextView2);
         sameDirection.addCharOrder(CharOrder.Number);
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                stickyText2.setText("eeee");
+                stickyText2.setText("eeee\naaaaa");
             }
         }, 2000L);
 
@@ -144,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 charOrder1.setText("g"); //move from a to g
 
-                charOrder2.setText("g"); //just like charOrder1 but with differen charOder
+                charOrder2.setText("g"); //just like charOrder1 but with different charOder
             }
         }, 2000L);
     }

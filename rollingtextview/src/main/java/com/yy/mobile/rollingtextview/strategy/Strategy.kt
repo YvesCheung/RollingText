@@ -7,6 +7,7 @@ package com.yy.mobile.rollingtextview.strategy
  * E-mail: zhangyu4@yy.com
  * YY: 909017428
  */
+@Suppress("MemberVisibilityCanBePrivate")
 object Strategy {
 
     /**
@@ -48,7 +49,7 @@ object Strategy {
      * the animation starts with the rightmost digits and works to the left.
      */
     @JvmStatic
-    fun CarryBitAnimation(): CharOrderStrategy = NonZeroFirstStrategy(CarryBitStrategy())
+    fun CarryBitAnimation(): CharOrderStrategy = NonZeroFirstAnimation(CarryBitStrategy())
 
     /**
      * 装饰者模式，使动画最高位数字不为0
