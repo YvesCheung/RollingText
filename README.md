@@ -76,7 +76,7 @@ Download
 
     ```groovy
     dependencies {  
-	    compile 'com.github.YvesCheung:RollingText:[![build](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)'
+	    compile 'com.github.YvesCheung:RollingText: [![build](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText) '
 	}
     ```
 
