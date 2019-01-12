@@ -1,7 +1,5 @@
 package com.yy.mobile.rollingtextview.util
 
-import android.util.Log
-
 /**
  * Created by 张宇 on 2018/2/27.
  * E-mail: zhangyu4@yy.com
@@ -17,21 +15,16 @@ import android.util.Log
  * @param startIndex 新列表的第一个元素从原列表的startIndex索引值开始
  */
 class CircularList<T> @JvmOverloads constructor(
-        private val list: List<T>,
-        override val size: Int,
-        private val startIndex: Int = 0
+    private val list: List<T>,
+    override val size: Int,
+    private val startIndex: Int = 0
 ) : List<T> by list {
 
     private val rawSize = list.size
 
     override fun get(index: Int): T {
-        try {
-            val rawIndex = (index + startIndex) % rawSize
-            return list[rawIndex]
-        } catch (e: ArithmeticException) {
-            Log.i("zycheck", "1")
-            throw e
-        }
+        val rawIndex = (index + startIndex) % rawSize
+        return list[rawIndex]
     }
 
     override fun isEmpty() = size <= 0
@@ -41,7 +34,7 @@ class CircularList<T> @JvmOverloads constructor(
     override fun lastIndexOf(element: T) = indexOfLast { it == element }
 
     override fun subList(fromIndex: Int, toIndex: Int): List<T> =
-            CircularList(list, toIndex - fromIndex, size + fromIndex)
+        CircularList(list, toIndex - fromIndex, size + fromIndex)
 
     override fun iterator(): Iterator<T> = listIterator()
 
