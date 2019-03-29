@@ -24,9 +24,11 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //implementation 'com.github.YvesCheung:RollingText:1.2.2'
     implementation project(":rollingtextview")
 }
 
 repositories {
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }
