@@ -79,13 +79,13 @@ internal class TextManager(
 
     fun setText(targetText: CharSequence) {
 
-        val itr = textColumns.iterator()
-        while (itr.hasNext()) {
-            val column = itr.next()
-            if (column.currentWidth.isZero()) {
-                itr.remove()
-            }
-        }
+//        val itr = textColumns.iterator()
+//        while (itr.hasNext()) {
+//            val column = itr.next()
+//            if (column.currentWidth.isZero()) {
+//                itr.remove()
+//            }
+//        }
 
         val sourceText = String(currentText)
 

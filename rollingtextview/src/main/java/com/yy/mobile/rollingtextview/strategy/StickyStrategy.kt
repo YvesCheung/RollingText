@@ -7,6 +7,7 @@ import com.yy.mobile.rollingtextview.PreviousProgress
  * E-mail: zhangyu4@yy.com
  * YY: 909017428
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class StickyStrategy(val factor: Double) : NormalAnimationStrategy() {
 
     init {

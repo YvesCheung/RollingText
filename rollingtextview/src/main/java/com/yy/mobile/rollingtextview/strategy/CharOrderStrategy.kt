@@ -160,7 +160,7 @@ typealias CharPool = List<Collection<Char>>
  *
  * [SCROLL_DOWN] 向下滚动
  */
-enum class Direction(var value: Int) {
+enum class Direction(val value: Int) {
     SCROLL_UP(-1),
     SCROLL_DOWN(1)
 }

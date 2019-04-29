@@ -10,6 +10,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.yy.mobile.rollingtextview.CharOrder;
 import com.yy.mobile.rollingtextview.RollingTextView;
+import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy;
+import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy.TextAlignment;
 import com.yy.mobile.rollingtextview.strategy.Direction;
 import com.yy.mobile.rollingtextview.strategy.Strategy;
 
@@ -23,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler handler = new Handler();
 
-    private List<String> list = Arrays.asList("1", "9", "12", "19", "24", "36", "47",
-            "56", "63", "78", "89", "95", "132", "289", "312", "400");
+    private List<String> list = Arrays.asList("1", "21339", "12", "123319", "24", "6", "247",
+            "5226", "63", "378", "234389", "12395", "2", "1289", "32212", "400");
     private int idx = 0;
 
     @Override
@@ -62,7 +64,19 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                carryBit.setText(list.get(idx++ % list.size()));
+                carryBit.setText(list.get(idx % list.size()));
+                handler.postDelayed(this, 3000L);
+            }
+        }, 2000L);
+
+        final RollingTextView alignLeft = findViewById(R.id.rollingTextView4);
+        alignLeft.addCharOrder(CharOrder.Number);
+        alignLeft.setAnimationDuration(2000L);
+        alignLeft.setCharStrategy(new AlignAnimationStrategy(TextAlignment.Left));
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                alignLeft.setText(list.get(idx++ % list.size()));
                 handler.postDelayed(this, 3000L);
             }
         }, 2000L);

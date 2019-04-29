@@ -33,8 +33,9 @@
         android:id="@+id/rollingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/alphaBetView"
-        android:layout_centerHorizontal="true"
+        android:layout_marginRight="100dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="0"
@@ -59,8 +60,9 @@
         android:id="@+id/rollingTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/rollingTextView"
-        android:layout_centerHorizontal="true"
+        android:layout_marginRight="100dp"
         android:gravity="center"
         android:text="0"
         android:textColor="#ffff00ff"
@@ -83,8 +85,9 @@
         android:id="@+id/rollingTextView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/rollingTextView2"
-        android:layout_centerHorizontal="true"
+        android:layout_marginRight="100dp"
         android:gravity="center"
         android:text="0"
         android:textColor="#ffff00ff"
@@ -103,11 +106,33 @@
         android:text="CarryBit"
         android:textSize="14sp" />
 
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/rollingTextView3"
+        android:layout_marginLeft="50dp"
+        android:gravity="start|center_vertical"
+        android:padding="10dp"
+        android:text="AlignLeft"
+        android:textSize="14sp" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/rollingTextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rollingTextView3"
+        android:layout_marginLeft="140dp"
+        android:text="0"
+        android:textColor="#ffff00ff"
+        android:textSize="35sp"
+        android:textStyle="italic" />
+
     <RelativeLayout
         android:id="@+id/stickyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rollingTextView3"
+        android:layout_below="@id/rollingTextView4"
         android:layout_marginTop="10dp">
 
         <com.yy.mobile.rollingtextview.RollingTextView
@@ -162,7 +187,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stickyLayout2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:textSize="30sp" />
 
     <LinearLayout
@@ -170,7 +195,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/carryTextView"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <com.yy.mobile.rollingtextview.RollingTextView
             android:layout_width="0dp"
