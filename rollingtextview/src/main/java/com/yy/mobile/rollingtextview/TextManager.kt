@@ -26,6 +26,8 @@ internal class TextManager(
 
     private var charListColumns: List<List<Char>> = Collections.emptyList()
 
+    var letterSpacingExtra: Int = 0
+
     init {
         updateFontMatrics()
     }
@@ -68,12 +70,18 @@ internal class TextManager(
     fun draw(canvas: Canvas) {
         textColumns.forEach {
             it.draw(canvas)
-            canvas.translate(it.currentWidth, 0f)
+            canvas.translate(it.currentWidth + letterSpacingExtra, 0f)
         }
     }
 
     val currentTextWidth: Float
-        get() = textColumns.map { it.currentWidth }.fold(0f) { total, next -> total + next }
+        get() {
+            val space = letterSpacingExtra * Math.max(0, textColumns.size - 1)
+            val textWidth = textColumns
+                .map { it.currentWidth }
+                .fold(0f) { total, next -> total + next }
+            return textWidth + space
+        }
 
     private fun Float.isZero(): Boolean = this < FLT_EPSILON && this > -FLT_EPSILON
 

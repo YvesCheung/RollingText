@@ -299,6 +299,15 @@ open class RollingTextView : View {
             }
         }
 
+    /**
+     * px between letter
+     */
+    var letterSpacingExtra: Int
+        set(value) {
+            textManager.letterSpacingExtra = value
+        }
+        get() = textManager.letterSpacingExtra
+
     override fun getBaseline(): Int {
         val fontMetrics = textPaint.fontMetrics
         return (textManager.textHeight / 2 + ((fontMetrics.descent - fontMetrics.ascent) / 2 - fontMetrics.descent)).toInt()

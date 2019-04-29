@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         final RollingTextView timeView = findViewById(R.id.timeView);
         timeView.setAnimationDuration(300);
+        timeView.setLetterSpacingExtra(10);
         @SuppressLint("SimpleDateFormat") final DateFormat format = new SimpleDateFormat("HH:mm:ss");
         handler.post(new Runnable() {
             @Override
