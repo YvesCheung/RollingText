@@ -76,8 +76,8 @@ Download
 
     ```groovy
     dependencies {  
-	    compile 'com.github.YvesCheung:RollingText:x.y.z'
-	}
+    	implementation 'com.github.YvesCheung:RollingText:x.y.z'
+    }
     ```
     
 > x.y.z replace with [![build](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
