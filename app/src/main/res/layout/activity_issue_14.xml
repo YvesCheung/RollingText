@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivFragmentIcon"
+        android:layout_width="33dp"
+        android:layout_height="match_parent"
+        android:padding="9dp"
+        android:src="@android:drawable/arrow_down_float" />
+
+    <com.yy.mobile.rollingtextview.RollingTextView
+        android:id="@+id/tvFragmentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/ivFragmentIcon"
+        android:gravity="center_vertical"
+        android:text=""
+        android:textColor="#a09fa3"
+        android:textSize="15dp" />
+
+
+    <LinearLayout
+        android:id="@+id/layoutPhotoAlbum"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <TextView
+            android:id="@+id/photoAlbum"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="所有图片"
+            android:textColor="#a09fa3"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/photoAlbumArrow"
+            android:layout_width="10dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center_vertical"
+            android:rotation="180"
+            android:src="@android:drawable/arrow_up_float" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/layoutPhotoConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="确定"
+        android:textColor="@android:color/white"
+        android:textSize="16dp" />
+
+</RelativeLayout>
