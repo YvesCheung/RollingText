@@ -2,6 +2,8 @@ package com.yy.mobile.rollingtextview
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.util.Log
+import android.widget.LinearLayout.HORIZONTAL
 import com.yy.mobile.rollingtextview.TextManager.Companion.EMPTY
 import com.yy.mobile.rollingtextview.strategy.Direction
 
@@ -12,17 +14,16 @@ import com.yy.mobile.rollingtextview.strategy.Direction
  */
 @Suppress("MemberVisibilityCanBePrivate")
 internal class TextColumn(
-        private val manager: TextManager,
-        private val textPaint: Paint,
-        var changeCharList: List<Char>,
-        var direction: Direction) {
+    private val manager: TextManager,
+    private val textPaint: Paint,
+    var changeCharList: List<Char>,
+    var direction: Direction
+) {
 
     var currentWidth: Float = 0f
 
     var currentChar: Char = EMPTY
-        private set(value) {
-            field = value
-        }
+        private set
 
     val sourceChar
         get() = if (changeCharList.size < 2) EMPTY else changeCharList.first()
@@ -34,8 +35,8 @@ internal class TextColumn(
 
     private var targetWidth = 0f
 
-    private var previousBottomDelta = 0.0
-    private var bottomDelta = 0.0
+    private var previousEdgeDelta = 0.0
+    private var edgeDelta = 0.0
 
     var index = 0
 
@@ -59,8 +60,8 @@ internal class TextColumn(
         direction = dir
         initChangeCharList()
         index = 0
-        previousBottomDelta = bottomDelta
-        bottomDelta = 0.0
+        previousEdgeDelta = edgeDelta
+        edgeDelta = 0.0
     }
 
     private fun initChangeCharList() {
@@ -77,17 +78,23 @@ internal class TextColumn(
     }
 
     fun onAnimationUpdate(
-            currentIndex: Int,
-            offsetPercentage: Double,
-            progress: Double): PreviousProgress {
+        currentIndex: Int,
+        offsetPercentage: Double,
+        progress: Double
+    ): PreviousProgress {
 
         //当前字符
         index = currentIndex
         currentChar = changeCharList[currentIndex]
 
         //从上一次动画结束时的偏移值开始
-        val additionalDelta = previousBottomDelta * (1.0 - progress)
-        bottomDelta = offsetPercentage * manager.textHeight * direction.value + additionalDelta
+        val additionalDelta = previousEdgeDelta * (1.0 - progress)
+        edgeDelta =
+            if (direction.orientation == HORIZONTAL) {
+                offsetPercentage * currentWidth * direction.value + additionalDelta
+            } else {
+                offsetPercentage * manager.textHeight * direction.value + additionalDelta
+            }
 
         //计算当前字符宽度，为第一个字符和最后一个字符的过渡宽度
         currentWidth = (lastCharWidth - firstCharWidth) * progress.toFloat() + firstCharWidth
@@ -97,23 +104,35 @@ internal class TextColumn(
 
     fun onAnimationEnd() {
         currentChar = targetChar
-        bottomDelta = 0.0
-        previousBottomDelta = 0.0
+        edgeDelta = 0.0
+        previousEdgeDelta = 0.0
     }
 
     fun draw(canvas: Canvas) {
+        val cs = canvas.save()
+        val originRect = canvas.clipBounds
+        canvas.clipRect(0, originRect.top, currentWidth.toInt(), originRect.bottom)
 
-        fun drawText(idx: Int, verticalOffset: Float) {
+
+        fun drawText(idx: Int, horizontalOffset: Float = 0f, verticalOffset: Float = 0f) {
 
             fun charAt(idx: Int) = CharArray(1) { changeCharList[idx] }
 
             if (idx >= 0 && idx < changeCharList.size && changeCharList[idx] != EMPTY) {
-                canvas.drawText(charAt(idx), 0, 1, 0f, verticalOffset, textPaint)
+                canvas.drawText(charAt(idx), 0, 1, horizontalOffset, verticalOffset, textPaint)
             }
         }
 
-        drawText(index + 1, bottomDelta.toFloat() - manager.textHeight * direction.value)
-        drawText(index, bottomDelta.toFloat())
-        drawText(index - 1, bottomDelta.toFloat() + manager.textHeight * direction.value)
+        if (direction.orientation == HORIZONTAL) {
+            drawText(index + 1, horizontalOffset = edgeDelta.toFloat() - currentWidth * direction.value)
+            drawText(index, horizontalOffset = edgeDelta.toFloat())
+            drawText(index - 1, horizontalOffset = edgeDelta.toFloat() + currentWidth * direction.value)
+        } else {
+            drawText(index + 1, verticalOffset = edgeDelta.toFloat() - manager.textHeight * direction.value)
+            drawText(index, verticalOffset = edgeDelta.toFloat())
+            drawText(index - 1, verticalOffset = edgeDelta.toFloat() + manager.textHeight * direction.value)
+        }
+
+        canvas.restoreToCount(cs)
     }
 }

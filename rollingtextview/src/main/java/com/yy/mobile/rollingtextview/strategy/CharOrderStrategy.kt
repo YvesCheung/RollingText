@@ -1,5 +1,7 @@
 package com.yy.mobile.rollingtextview.strategy
 
+import android.widget.LinearLayout.HORIZONTAL
+import android.widget.LinearLayout.VERTICAL
 import com.yy.mobile.rollingtextview.NextProgress
 import com.yy.mobile.rollingtextview.PreviousProgress
 import com.yy.mobile.rollingtextview.TextManager
@@ -157,10 +159,14 @@ typealias CharPool = List<Collection<Char>>
  * 字符动画滚动的方向：
  *
  * [SCROLL_UP] 向上滚动
- *
  * [SCROLL_DOWN] 向下滚动
+ * [SCROLL_LEFT] 向左滚动
+ * [SCROLL_RIGHT] 向右滚动
  */
-enum class Direction(val value: Int) {
-    SCROLL_UP(-1),
-    SCROLL_DOWN(1)
+enum class Direction(val value: Int, val orientation: Int) {
+    SCROLL_UP(-1, VERTICAL),
+    SCROLL_DOWN(1, VERTICAL),
+
+    SCROLL_LEFT(-1, HORIZONTAL),
+    SCROLL_RIGHT(1, HORIZONTAL)
 }

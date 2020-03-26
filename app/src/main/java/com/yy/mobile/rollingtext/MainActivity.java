@@ -13,13 +13,20 @@ import com.yy.mobile.rollingtextview.RollingTextView;
 import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy;
 import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy.TextAlignment;
 import com.yy.mobile.rollingtextview.strategy.Direction;
+import com.yy.mobile.rollingtextview.strategy.NormalAnimationStrategy;
+import com.yy.mobile.rollingtextview.strategy.SimpleCharOrderStrategy;
 import com.yy.mobile.rollingtextview.strategy.Strategy;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import kotlin.Pair;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -159,5 +166,44 @@ public class MainActivity extends AppCompatActivity {
                 charOrder2.setText("g"); //just like charOrder1 but with different charOder
             }
         }, 2000L);
+
+        final RollingTextView diffDirection = findViewById(R.id.directionExample);
+        diffDirection.setAnimationDuration(500L);
+        diffDirection.addCharOrder(CharOrder.UpperAlphabet);
+        diffDirection.setLetterSpacingExtra(10);
+        diffDirection.setCharStrategy(new NormalAnimationStrategy() {
+            @NotNull
+            @Override
+            public Pair<List<Character>, Direction> findCharOrder(
+                    char sourceChar,
+                    char targetChar,
+                    int index,
+                    @Nullable Iterable<Character> order) {
+                Pair<List<Character>, Direction> origin =
+                        super.findCharOrder(sourceChar, targetChar, index, order);
+                return new Pair<>(origin.getFirst(), diffDirection(index));
+            }
+
+            private Direction diffDirection(int index) {
+                if (index == 0) {
+                    return Direction.SCROLL_LEFT;
+                } else if (index == 1) {
+                    return Direction.SCROLL_UP;
+                } else if (index == 2) {
+                    return Direction.SCROLL_DOWN;
+                } else {
+                    return Direction.SCROLL_RIGHT;
+                }
+            }
+        });
+        new Runnable() {
+            int idx = 0;
+
+            @Override
+            public void run() {
+                diffDirection.setText(String.valueOf(1111 * (idx++ % 9 + 1)));
+                handler.postDelayed(this, 1000L);
+            }
+        }.run();
     }
 }

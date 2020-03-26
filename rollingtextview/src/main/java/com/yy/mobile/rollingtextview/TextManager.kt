@@ -115,9 +115,7 @@ internal class TextManager(
         get(): CharArray = CharArray(textColumns.size) { index -> textColumns[index].currentChar }
 
     var textHeight: Float = 0f
-        private set(value) {
-            field = value
-        }
+        private set
 
     var textBaseline = 0f
         private set(value) {
