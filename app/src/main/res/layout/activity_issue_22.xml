@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Compare TextView"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <com.yy.mobile.rollingtextview.RollingTextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:onClick="performIssue22"
+            android:padding="12dp"
+            android:text="Click Me"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+    </LinearLayout>
+</FrameLayout>
