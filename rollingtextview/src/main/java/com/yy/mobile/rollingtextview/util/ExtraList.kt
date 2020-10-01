@@ -17,12 +17,10 @@ class ExtraList<T>(
         private val last: T? = null
 ) : List<T> {
 
-    override val size: Int = if (first != null && last != null) {
-        list.size + 2
-    } else if (first != null || last != null) {
-        list.size + 1
-    } else {
-        list.size
+    override val size: Int = when {
+        first != null && last != null -> list.size + 2
+        first != null || last != null -> list.size + 1
+        else -> list.size
     }
 
     override fun contains(element: T): Boolean {
@@ -34,14 +32,11 @@ class ExtraList<T>(
     }
 
     override fun get(index: Int): T {
-        return if (index == 0 && first != null) {
-            first
-        } else if (index == size - 1 && last != null) {
-            last
-        } else if (first != null) {
-            list[index - 1]
-        } else {
-            list[index]
+        return when {
+            index == 0 && first != null -> first
+            index == size - 1 && last != null -> last
+            first != null ->list[index - 1]
+            else -> list[index]
         }
     }
 
@@ -50,15 +45,16 @@ class ExtraList<T>(
             return 0
         }
         val rawFirstIndex = list.indexOf(element)
-        if (rawFirstIndex != -1) {
-            return if (first != null)
-                rawFirstIndex + 1
-            else rawFirstIndex
+        return when {
+            rawFirstIndex != -1 -> {
+                when {
+                    first != null -> rawFirstIndex + 1
+                    else -> rawFirstIndex
+                }
+            }
+            last != null && last == element -> size - 1
+            else -> rawFirstIndex
         }
-        if (last != null && last == element) {
-            return size - 1
-        }
-        return rawFirstIndex
     }
 
     override fun isEmpty(): Boolean {
@@ -72,15 +68,16 @@ class ExtraList<T>(
             return size - 1
         }
         val rawLastIndex = list.lastIndexOf(element)
-        if (rawLastIndex != -1) {
-            return if (first != null)
-                rawLastIndex + 1
-            else rawLastIndex
+        return when {
+            rawLastIndex != -1 -> {
+                when {
+                    first != null -> rawLastIndex + 1
+                    else -> rawLastIndex
+                }
+            }
+            first != null && first == element -> 0
+            else -> rawLastIndex
         }
-        if (first != null && first == element) {
-            return 0
-        }
-        return rawLastIndex
     }
 
     override fun listIterator(): ListIterator<T> = ExtraIterator()

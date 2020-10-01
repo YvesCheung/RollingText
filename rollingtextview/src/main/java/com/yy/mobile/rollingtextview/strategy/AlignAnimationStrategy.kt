@@ -1,6 +1,8 @@
 package com.yy.mobile.rollingtextview.strategy
 
 import com.yy.mobile.rollingtextview.TextManager
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 /**
  * Created by 张宇 on 2019/4/29.
@@ -16,7 +18,7 @@ open class AlignAnimationStrategy(val alignment: TextAlignment) : NormalAnimatio
         index: Int,
         charPool: CharPool
     ): Pair<List<Char>, Direction> {
-        val maxLen = Math.max(sourceText.length, targetText.length)
+        val maxLen = max(sourceText.length, targetText.length)
         var srcChar = TextManager.EMPTY
         var tgtChar = TextManager.EMPTY
 
@@ -35,7 +37,7 @@ open class AlignAnimationStrategy(val alignment: TextAlignment) : NormalAnimatio
     private fun getTextRange(text: CharSequence, maxLen: Int): IntRange {
         val from: Int = when (alignment) {
             TextAlignment.Left -> 0
-            TextAlignment.Center -> Math.round((maxLen - text.length) / 2f)
+            TextAlignment.Center -> ((maxLen - text.length) / 2f).roundToInt()
             TextAlignment.Right -> maxLen - text.length
         }
         val to: Int = from + text.length
