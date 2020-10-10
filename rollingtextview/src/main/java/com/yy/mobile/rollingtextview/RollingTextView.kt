@@ -5,10 +5,8 @@ package com.yy.mobile.rollingtextview
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Resources
-import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -22,6 +20,8 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
+import androidx.annotation.RequiresApi
+import androidx.core.content.withStyledAttributes
 import com.yy.mobile.rollingtextview.strategy.CharOrderStrategy
 import com.yy.mobile.rollingtextview.strategy.Strategy
 
@@ -30,8 +30,22 @@ import com.yy.mobile.rollingtextview.strategy.Strategy
  * E-mail: zhangyu4@yy.com
  * YY: 909017428
  */
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 @Suppress("MemberVisibilityCanBePrivate")
-open class RollingTextView : View {
+open class RollingTextView @JvmOverloads constructor(
+        context: Context,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0, // Specify specific default attribute here
+        defStyleRes: Int = 0 // Specify specific default style here
+) : View(context, attrs, defStyleAttr, defStyleRes) {
+
+    object CharOrder {
+        const val Number = "0123456789"
+        const val Hex = "0123456789ABCDEF"
+        const val Binary = "01"
+        const val Alphabet = "abcdefghijklmnopqrstuvwxyz"
+        const val UpperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    }
 
     private var lastMeasuredDesiredWidth: Int = 0
     private var lastMeasuredDesiredHeight: Int = 0
@@ -48,183 +62,14 @@ open class RollingTextView : View {
 
     private var targetText: CharSequence = ""
 
-    constructor(context: Context) : super(context) {
-        init(context, null, 0, 0)
-    }
-
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init(context, attrs, 0, 0)
-    }
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-        : super(context, attrs, defStyleAttr) {
-        init(context, attrs, defStyleAttr, 0)
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int)
-        : super(context, attrs, defStyleAttr, defStyleRes) {
-        init(context, attrs, defStyleAttr, defStyleRes)
-    }
-
-    private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
-
-        var shadowColor = 0
-        var shadowDx = 0f
-        var shadowDy = 0f
-        var shadowRadius = 0f
-        var text = ""
-        var textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-            12f, context.resources.displayMetrics)
-
-        fun applyTypedArray(arr: TypedArray) {
-            gravity = arr.getInt(R.styleable.RollingTextView_android_gravity, gravity)
-            shadowColor = arr.getColor(R.styleable.RollingTextView_android_shadowColor, shadowColor)
-            shadowDx = arr.getFloat(R.styleable.RollingTextView_android_shadowDx, shadowDx)
-            shadowDy = arr.getFloat(R.styleable.RollingTextView_android_shadowDy, shadowDy)
-            shadowRadius = arr.getFloat(R.styleable.RollingTextView_android_shadowRadius, shadowRadius)
-            text = arr.getString(R.styleable.RollingTextView_android_text) ?: ""
-            textColor = arr.getColor(R.styleable.RollingTextView_android_textColor, textColor)
-            textSize = arr.getDimension(R.styleable.RollingTextView_android_textSize, textSize)
-            textStyle = arr.getInt(R.styleable.RollingTextView_android_textStyle, textStyle)
-        }
-
-        val arr = context.obtainStyledAttributes(attrs, R.styleable.RollingTextView,
-            defStyleAttr, defStyleRes)
-
-        val textAppearanceResId = arr.getResourceId(
-            R.styleable.RollingTextView_android_textAppearance, -1)
-
-        if (textAppearanceResId != -1) {
-            val textAppearanceArr = context.obtainStyledAttributes(
-                textAppearanceResId, R.styleable.RollingTextView)
-            applyTypedArray(textAppearanceArr)
-            textAppearanceArr.recycle()
-        }
-
-        applyTypedArray(arr)
-
-        animationDuration = arr.getInt(R.styleable.RollingTextView_duration, animationDuration.toInt()).toLong()
-
-        textPaint.isAntiAlias = true
-        if (shadowColor != 0) {
-            textPaint.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor)
-        }
-        if (textStyle != 0) {
-            typeface = textPaint.typeface
-        }
-
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
-        setText(text, false)
-
-        arr.recycle()
-
-        animator.addUpdateListener {
-            textManager.updateAnimation(it.animatedFraction)
-            checkForReLayout()
-            invalidate()
-        }
-        animator.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                textManager.onAnimationEnd()
-            }
-        })
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
-        canvas.save()
-
-        realignAndClipCanvasForGravity(canvas)
-
-        canvas.translate(0f, textManager.textBaseline)
-
-        textManager.draw(canvas)
-
-        canvas.restore()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        lastMeasuredDesiredWidth = computeDesiredWidth()
-        lastMeasuredDesiredHeight = computeDesiredHeight()
-
-        val desiredWidth = resolveSize(lastMeasuredDesiredWidth, widthMeasureSpec)
-        val desiredHeight = resolveSize(lastMeasuredDesiredHeight, heightMeasureSpec)
-
-        setMeasuredDimension(desiredWidth, desiredHeight)
-    }
-
-    override fun onSizeChanged(width: Int, height: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(width, height, oldw, oldh)
-        viewBounds.set(paddingLeft, paddingTop, width - paddingRight,
-            height - paddingBottom)
-    }
-
-    private fun checkForReLayout(): Boolean {
-        //        val widthChanged = lastMeasuredDesiredWidth != computeDesiredWidth()
-        //        val heightChanged = lastMeasuredDesiredHeight != computeDesiredHeight()
-        //
-        //        if (widthChanged || heightChanged) {
-        //            requestLayout()
-        //            return true
-        //        }
-        //        return false
-        requestLayout()
-        return true
-    }
-
-    private fun computeDesiredWidth(): Int {
-        return textManager.currentTextWidth.toInt() + paddingLeft + paddingRight
-    }
-
-    private fun computeDesiredHeight(): Int {
-        return textManager.textHeight.toInt() + paddingTop + paddingBottom
-    }
-
-    private fun realignAndClipCanvasForGravity(canvas: Canvas) {
-        val currentWidth = textManager.currentTextWidth
-        val currentHeight = textManager.textHeight
-        val availableWidth = viewBounds.width()
-        val availableHeight = viewBounds.height()
-        var translationX = 0f
-        var translationY = 0f
-        if (gravity and Gravity.CENTER_VERTICAL == Gravity.CENTER_VERTICAL) {
-            translationY = viewBounds.top + (availableHeight - currentHeight) / 2f
-        }
-        if (gravity and Gravity.CENTER_HORIZONTAL == Gravity.CENTER_HORIZONTAL) {
-            translationX = viewBounds.left + (availableWidth - currentWidth) / 2f
-        }
-        if (gravity and Gravity.TOP == Gravity.TOP) {
-            translationY = 0f
-        }
-        if (gravity and Gravity.BOTTOM == Gravity.BOTTOM) {
-            translationY = viewBounds.top + (availableHeight - currentHeight)
-        }
-        if (gravity and Gravity.START == Gravity.START) {
-            translationX = 0f
-        }
-        if (gravity and Gravity.END == Gravity.END) {
-            translationX = viewBounds.left + (availableWidth - currentWidth)
-        }
-
-        canvas.translate(translationX, translationY)
-        canvas.clipRect(0f, 0f, currentWidth, currentHeight)
-    }
-
-    private fun onTextPaintMeasurementChanged() {
-        textManager.updateFontMatrics()
-        checkForReLayout()
-        invalidate()
-    }
 
     /***************************** Public API below ***********************************************/
 
     /**
      * 滚动动画总时长
      */
-    var animationDuration: Long = 750L
 
+    var animationDuration: Long = 750L
     var animationInterpolator: Interpolator = LinearInterpolator()
 
     /**
@@ -370,16 +215,133 @@ open class RollingTextView : View {
      * 与[charStrategy]配合使用定义动画效果
      */
     fun addCharOrder(orderList: Array<Char>) = charOrderManager.addCharOrder(orderList.asIterable())
-}
 
-object CharOrder {
-    const val Number = "0123456789"
+    init {
 
-    const val Hex = "0123456789ABCDEF"
+        var shadowColor = 0
+        var shadowDx = 0f
+        var shadowDy = 0f
+        var shadowRadius = 0f
+        var text = ""
+        var textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+            12f, context.resources.displayMetrics)
 
-    const val Binary = "01"
+        // Already does recycling internally
+        context.withStyledAttributes(attrs, R.styleable.RollingTextView) {
+            gravity = getInt(R.styleable.RollingTextView_android_gravity, gravity)
+            shadowColor = getColor(R.styleable.RollingTextView_android_shadowColor, shadowColor)
+            shadowDx = getFloat(R.styleable.RollingTextView_android_shadowDx, shadowDx)
+            shadowDy = getFloat(R.styleable.RollingTextView_android_shadowDy, shadowDy)
+            shadowRadius = getFloat(R.styleable.RollingTextView_android_shadowRadius, shadowRadius)
+            text = getString(R.styleable.RollingTextView_android_text) ?: ""
+            textColor = getColor(R.styleable.RollingTextView_android_textColor, textColor)
+            textSize = getDimension(R.styleable.RollingTextView_android_textSize, textSize)
+            textStyle = getInt(R.styleable.RollingTextView_android_textStyle, textStyle)
+        }
 
-    const val Alphabet = "abcdefghijklmnopqrstuvwxyz"
+        val arr = context.obtainStyledAttributes(attrs, R.styleable.RollingTextView,
+        defStyleAttr, defStyleRes)
 
-    const val UpperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        animationDuration = arr.getInt(R.styleable.RollingTextView_duration, animationDuration.toInt()).toLong()
+
+        textPaint.isAntiAlias = true
+        if (shadowColor != 0) {
+            textPaint.setShadowLayer(shadowRadius, shadowDx, shadowDy, shadowColor)
+        }
+        if (textStyle != 0) {
+            typeface = textPaint.typeface
+        }
+
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        setText(text, false)
+
+        arr.recycle()
+
+        animator.addUpdateListener {
+            textManager.updateAnimation(it.animatedFraction)
+            checkForReLayout()
+            invalidate()
+        }
+        animator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                textManager.onAnimationEnd()
+            }
+        })
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        canvas.save()
+        realignAndClipCanvasForGravity(canvas)
+        canvas.translate(0f, textManager.textBaseline)
+        textManager.draw(canvas)
+        canvas.restore()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        lastMeasuredDesiredWidth = computeDesiredWidth()
+        lastMeasuredDesiredHeight = computeDesiredHeight()
+
+        val desiredWidth = resolveSize(lastMeasuredDesiredWidth, widthMeasureSpec)
+        val desiredHeight = resolveSize(lastMeasuredDesiredHeight, heightMeasureSpec)
+
+        setMeasuredDimension(desiredWidth, desiredHeight)
+    }
+
+    override fun onSizeChanged(width: Int, height: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(width, height, oldw, oldh)
+        viewBounds.set(paddingLeft, paddingTop, width - paddingRight,
+            height - paddingBottom)
+    }
+
+    private fun checkForReLayout(): Boolean {
+        requestLayout()
+        return true
+    }
+
+    private fun computeDesiredWidth(): Int {
+        return textManager.currentTextWidth.toInt() + paddingLeft + paddingRight
+    }
+
+    private fun computeDesiredHeight(): Int {
+        return textManager.textHeight.toInt() + paddingTop + paddingBottom
+    }
+
+    private fun realignAndClipCanvasForGravity(canvas: Canvas) {
+        val currentWidth = textManager.currentTextWidth
+        val currentHeight = textManager.textHeight
+        val availableWidth = viewBounds.width()
+        val availableHeight = viewBounds.height()
+        var translationX = 0f
+        var translationY = 0f
+
+        if (gravity and Gravity.CENTER_VERTICAL == Gravity.CENTER_VERTICAL) {
+            translationY = viewBounds.top + (availableHeight - currentHeight) / 2f
+        }
+        if (gravity and Gravity.CENTER_HORIZONTAL == Gravity.CENTER_HORIZONTAL) {
+            translationX = viewBounds.left + (availableWidth - currentWidth) / 2f
+        }
+        if (gravity and Gravity.TOP == Gravity.TOP) {
+            translationY = 0f
+        }
+        if (gravity and Gravity.BOTTOM == Gravity.BOTTOM) {
+            translationY = viewBounds.top + (availableHeight - currentHeight)
+        }
+        if (gravity and Gravity.START == Gravity.START) {
+            translationX = 0f
+        }
+        if (gravity and Gravity.END == Gravity.END) {
+            translationX = viewBounds.left + (availableWidth - currentWidth)
+        }
+
+        canvas.translate(translationX, translationY)
+        canvas.clipRect(0f, 0f, currentWidth, currentHeight)
+    }
+
+    private fun onTextPaintMeasurementChanged() {
+        textManager.updateFontMatrics()
+        checkForReLayout()
+        invalidate()
+    }
 }
