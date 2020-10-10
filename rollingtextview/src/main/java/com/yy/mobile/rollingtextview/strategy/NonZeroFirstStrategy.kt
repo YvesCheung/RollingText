@@ -3,6 +3,7 @@ package com.yy.mobile.rollingtextview.strategy
 import com.yy.mobile.rollingtextview.*
 import com.yy.mobile.rollingtextview.util.CircularList
 import com.yy.mobile.rollingtextview.util.ReplaceList
+import kotlin.math.max
 
 /**
  * Created by 张宇 on 2018/3/4.
@@ -29,7 +30,7 @@ open class NonZeroFirstStrategy(private val strategy: CharOrderStrategy) : CharO
 
         val (list, direction) = strategy.findCharOrder(sourceText, targetText, index, charPool)
 
-        val maxLen = Math.max(sourceText.length, targetText.length)
+        val maxLen = max(sourceText.length, targetText.length)
         val firstIdx = firstZeroAfterEmpty(list)
         val lastIdx = lastZeroBeforeEmpty(list)
         var replaceFirst = false

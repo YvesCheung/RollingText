@@ -32,12 +32,10 @@ class ReplaceList<T>(
     override fun containsAll(elements: Collection<T>): Boolean = elements.all { contains(it) }
 
     override fun get(index: Int): T {
-        return if (index == firstIdx && first != null) {
-            first
-        } else if (index == lastIdx && last != null) {
-            last
-        } else {
-            list[index]
+        return when {
+            index == firstIdx && first != null -> first
+            index == lastIdx && last != null -> last
+            else -> list[index]
         }
     }
 

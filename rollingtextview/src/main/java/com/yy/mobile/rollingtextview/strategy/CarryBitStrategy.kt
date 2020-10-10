@@ -5,6 +5,8 @@ import com.yy.mobile.rollingtextview.PreviousProgress
 import com.yy.mobile.rollingtextview.TextManager
 import com.yy.mobile.rollingtextview.util.CircularList
 import com.yy.mobile.rollingtextview.util.ExtraList
+import kotlin.math.abs
+import kotlin.math.max
 
 /**
  * Created by 张宇 on 2018/3/4.
@@ -29,7 +31,7 @@ open class CarryBitStrategy(val direction: Direction) : SimpleCharOrderStrategy(
                     " please use other animation strategy.")
         }
 
-        val maxLen = Math.max(sourceText.length, targetText.length)
+        val maxLen = max(sourceText.length, targetText.length)
         val srcArray = IntArray(maxLen)
         val tgtArray = IntArray(maxLen)
         val carryArray = IntArray(maxLen)
@@ -49,8 +51,8 @@ open class CarryBitStrategy(val direction: Direction) : SimpleCharOrderStrategy(
                     ?: throw IllegalStateException("the char $srcChar or $tgtChar cannot be found in the charPool," +
                             "please addCharOrder() before use")
             charOrderList.add(iterable)
-            srcArray[index] = Math.max(iterable.indexOf(srcChar) - 1, -1)
-            tgtArray[index] = Math.max(iterable.indexOf(tgtChar) - 1, -1)
+            srcArray[index] = max(iterable.indexOf(srcChar) - 1, -1)
+            tgtArray[index] = max(iterable.indexOf(tgtChar) - 1, -1)
             carryArray[index] = iterable.size - 1
         }
 
@@ -60,8 +62,8 @@ open class CarryBitStrategy(val direction: Direction) : SimpleCharOrderStrategy(
         var tgtTotal = 0
         var carry = 0
         (0 until maxLen).forEach { idx ->
-            srcTotal = Math.max(srcArray[idx], 0) + carry * srcTotal
-            tgtTotal = Math.max(tgtArray[idx], 0) + carry * tgtTotal
+            srcTotal = max(srcArray[idx], 0) + carry * srcTotal
+            tgtTotal = max(tgtArray[idx], 0) + carry * tgtTotal
             carry = carryArray[idx]
             sourceCumulative[idx] = srcTotal
             targetCumulative[idx] = tgtTotal
@@ -99,7 +101,7 @@ open class CarryBitStrategy(val direction: Direction) : SimpleCharOrderStrategy(
         val srcIndex = sourceIndex
         val charOrders = charOrderList
         if (srcIndex != null && charOrders != null) {
-            val preStartIndex = Math.max(srcIndex[columnIndex + 1], 0)
+            val preStartIndex = max(srcIndex[columnIndex + 1], 0)
             val preCarry = charOrders[columnIndex + 1].size - 1
             val preCurrentIndex = previousProgress.currentIndex
             val nextStartIndex = if (toBigger) {
@@ -138,12 +140,12 @@ open class CarryBitStrategy(val direction: Direction) : SimpleCharOrderStrategy(
 
             val orderList = charOrders[index].filterIndexed { i, _ -> i > 0 }
 
-            val size = Math.abs(srcCumulate[index] - tgtCumulate[index]) + 1
+            val size = abs(srcCumulate[index] - tgtCumulate[index]) + 1
             var first: Char? = null
             var last: Char? = null
             if (srcIndex[index] == -1) first = TextManager.EMPTY
             if (tgtIndex[index] == -1) last = TextManager.EMPTY
-            val (list, firstIndex) = determineCharOrder(orderList, Math.max(srcIndex[index], 0))
+            val (list, firstIndex) = determineCharOrder(orderList, srcIndex[index].coerceAtLeast(0))
             return circularList(
                     rawList = list,
                     size = size,

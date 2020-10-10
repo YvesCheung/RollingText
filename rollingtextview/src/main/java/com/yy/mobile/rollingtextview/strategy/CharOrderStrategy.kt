@@ -5,6 +5,7 @@ import android.widget.LinearLayout.VERTICAL
 import com.yy.mobile.rollingtextview.NextProgress
 import com.yy.mobile.rollingtextview.PreviousProgress
 import com.yy.mobile.rollingtextview.TextManager
+import kotlin.math.max
 
 /**
  * Created by 张宇 on 2018/2/28.
@@ -109,7 +110,7 @@ abstract class SimpleCharOrderStrategy : CharOrderStrategy {
             index: Int,
             charPool: CharPool): Pair<List<Char>, Direction> {
 
-        val maxLen = Math.max(sourceText.length, targetText.length)
+        val maxLen = max(sourceText.length, targetText.length)
         val disSrc = maxLen - sourceText.length
         val disTgt = maxLen - targetText.length
 
