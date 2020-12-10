@@ -4,7 +4,7 @@
 
 ![preview][1]
 
-[![build](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
+[ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion)
 
 [中文版README](README_CN.md)
 
@@ -61,26 +61,15 @@ More ideas can be implemented on the ``CharOrderStrategy`` interface to customiz
 Download
 ========
 
-1. Add in the root project build.gradle file：
-
-    ```groovy
-    allprojects {
-	 	repositories {
-	 		...
-			maven { url 'https://jitpack.io' }
-	 	}
-	}
-	```
-	
-2. Add dependency in the appropriate module
-
-    ```groovy
-    dependencies {  
-    	implementation 'com.github.YvesCheung:RollingText:x.y.z'
-    }
-    ```
+```groovy
+//jcenter
+dependencies {  
+    implementation 'com.yy.mobile:RollingText:x.y.z'
+}
+```
     
-> x.y.z replace with [![build](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
+> x.y.z replace with [ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion)
+
 
 Usage
 =========
