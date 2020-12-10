@@ -5,7 +5,6 @@ package com.yy.mobile.rollingtextview
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.res.Resources
 import android.content.res.TypedArray
@@ -14,7 +13,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.os.Build
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -30,7 +28,12 @@ import com.yy.mobile.rollingtextview.strategy.Strategy
  * 2018/2/26
  */
 @Suppress("MemberVisibilityCanBePrivate")
-open class RollingTextView : View {
+open class RollingTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     private var lastMeasuredDesiredWidth: Int = 0
     private var lastMeasuredDesiredHeight: Int = 0
@@ -47,27 +50,21 @@ open class RollingTextView : View {
 
     private var targetText: CharSequence = ""
 
-    constructor(context: Context) : super(context) {
-        init(context, null, 0, 0)
-    }
+    var animationDuration: Long = 750L
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init(context, attrs, 0, 0)
-    }
+    var typeface: Typeface?
+        set(value) {
+            textPaint.typeface = when (textStyle) {
+                Typeface.BOLD_ITALIC -> Typeface.create(value, Typeface.BOLD_ITALIC)
+                Typeface.BOLD -> Typeface.create(value, Typeface.BOLD)
+                Typeface.ITALIC -> Typeface.create(value, Typeface.ITALIC)
+                else -> value
+            }
+            onTextPaintMeasurementChanged()
+        }
+        get() = textPaint.typeface
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
-        : super(context, attrs, defStyleAttr) {
-        init(context, attrs, defStyleAttr, 0)
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int)
-        : super(context, attrs, defStyleAttr, defStyleRes) {
-        init(context, attrs, defStyleAttr, defStyleRes)
-    }
-
-    private fun init(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
-
+    init {
         var shadowColor = 0
         var shadowDx = 0f
         var shadowDy = 0f
@@ -219,11 +216,6 @@ open class RollingTextView : View {
 
     /***************************** Public API below ***********************************************/
 
-    /**
-     * 滚动动画总时长
-     */
-    var animationDuration: Long = 750L
-
     var animationInterpolator: Interpolator = LinearInterpolator()
 
     /**
@@ -263,18 +255,6 @@ open class RollingTextView : View {
             invalidate()
         }
     }
-
-    var typeface: Typeface?
-        set(value) {
-            textPaint.typeface = when (textStyle) {
-                Typeface.BOLD_ITALIC -> Typeface.create(value, Typeface.BOLD_ITALIC)
-                Typeface.BOLD -> Typeface.create(value, Typeface.BOLD)
-                Typeface.ITALIC -> Typeface.create(value, Typeface.ITALIC)
-                else -> value
-            }
-            onTextPaintMeasurementChanged()
-        }
-        get() = textPaint.typeface
 
     val currentText
         get() = textManager.currentText
@@ -369,16 +349,4 @@ open class RollingTextView : View {
      * 与[charStrategy]配合使用定义动画效果
      */
     fun addCharOrder(orderList: Array<Char>) = charOrderManager.addCharOrder(orderList.asIterable())
-}
-
-object CharOrder {
-    const val Number = "0123456789"
-
-    const val Hex = "0123456789ABCDEF"
-
-    const val Binary = "01"
-
-    const val Alphabet = "abcdefghijklmnopqrstuvwxyz"
-
-    const val UpperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 }
