@@ -55,26 +55,14 @@ alphaBetView.addCharOrder(CharOrder.Binary);
 配置
 =====
 
-1. 在App根目录的project build.gradle文件中添加：
-
-    ```groovy
-    allprojects {
-	 	repositories {
-	 		...
-			maven { url 'https://jitpack.io' }
-	 	}
-	}
-	```
-	
-2. 在对应的module 中添加依赖：
-
-    ```groovy
-    dependencies {  
-	    compile 'com.github.YvesCheung:RollingText:x.y.z'
-	}
-    ```
-
-> x.y.z 版本替换为 [![build](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
+```groovy
+//jcenter
+dependencies {  
+    implementation 'com.yy.mobile:RollingText:x.y.z'
+}
+```
+    
+> x.y.z replace with [ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion)
 
 使用
 =====
