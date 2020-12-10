@@ -1,7 +1,24 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
-group = 'com.github.YvesCheung'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'RollingText'
+
+    libraryGroupId = 'com.yy.mobile'
+    libraryName = 'RollingText'
+
+    libraryDescription = 'Android TextView with rolling animation'
+
+    siteUrl = 'https://github.com/YvesCheung/RollingText'
+    gitUrl = 'https://github.com/YvesCheung/RollingText.git'
+
+    libraryVersion = '1.2.7'
+
+    developerId = 'YvesCheung'
+    developerName = 'YvesCheung'
+    developerEmail = '975135274@qq.com'
+}
 
 android {
     compileSdkVersion 26
@@ -34,15 +51,4 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-repositories {
-    mavenCentral()
-}
-
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-
-artifacts {
-    archives sourcesJar
-}
+apply from: '../gradle/publish.gradle'
