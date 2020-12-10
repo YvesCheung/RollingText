@@ -8,13 +8,11 @@ import com.yy.mobile.rollingtextview.TextManager
 import kotlin.math.max
 
 /**
- * Created by 张宇 on 2018/2/28.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
- *
- *
  * 字符滚动变化的策略
  * strategy to determine how characters change
+ *
+ * @author YvesCheung
+ * 2018/2/28
  */
 interface CharOrderStrategy {
 

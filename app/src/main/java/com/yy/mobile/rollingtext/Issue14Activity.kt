@@ -11,11 +11,6 @@ import com.yy.mobile.rollingtextview.strategy.Direction
 import com.yy.mobile.rollingtextview.strategy.SameDirectionStrategy
 import kotlinx.android.synthetic.main.activity_issue_14.*
 
-/**
- * Created by 张宇 on 2019/5/24.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
- */
 class Issue14Activity : FragmentActivity() {
 
     private val list = listOf("1", "21339", "12", "123319", "24", "6", "247",

@@ -1,10 +1,6 @@
 package com.yy.mobile.rollingtextview.util
 
 /**
- * Created by 张宇 on 2018/2/27.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
- *
  * 可以把原来的[list]改造成循环列表
  *
  * 比如原来的列表为 a = <1,2,3>,如果有 b = CircularList(a, 6), 那么 b 列表遍历结果为 <1,2,3,1,2,3>,
@@ -13,6 +9,9 @@ package com.yy.mobile.rollingtextview.util
  * @param list 原来的列表
  * @param size 新列表的总大小
  * @param startIndex 新列表的第一个元素从原列表的startIndex索引值开始
+ *
+ * @author YvesCheung
+ * 2018/2/27
  */
 class CircularList<T> @JvmOverloads constructor(
     private val list: List<T>,

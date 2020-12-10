@@ -9,11 +9,9 @@ import kotlin.math.abs
 import kotlin.math.max
 
 /**
- * Created by 张宇 on 2018/3/4.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
+ * @author YvesCheung
+ * 2018/3/4
  */
-
 @Suppress("MemberVisibilityCanBePrivate")
 open class CarryBitStrategy(val direction: Direction) : SimpleCharOrderStrategy() {
 

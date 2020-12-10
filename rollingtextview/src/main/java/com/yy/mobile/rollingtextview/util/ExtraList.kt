@@ -1,15 +1,14 @@
 package com.yy.mobile.rollingtextview.util
 
 /**
- * Created by 张宇 on 2018/3/3.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
- *
  * 可以在原来的[list]上额外添加一个头元素[first]和一个尾元素[last]
  *
  * @param list 原来的list
  * @param first 可选的头节点，为空则不会添加
  * @param last 可选的尾节点，尾空则不会添加
+ *
+ * @author YvesCheung
+ * 2018/3/3
  */
 class ExtraList<T>(
         private val list: List<T>,

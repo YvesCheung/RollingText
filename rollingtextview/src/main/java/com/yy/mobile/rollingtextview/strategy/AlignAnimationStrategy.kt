@@ -5,9 +5,8 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 /**
- * Created by 张宇 on 2019/4/29.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
+ * @author YvesCheung
+ * 2019/4/29
  */
 @Suppress("MemberVisibilityCanBePrivate")
 open class AlignAnimationStrategy(val alignment: TextAlignment) : NormalAnimationStrategy() {

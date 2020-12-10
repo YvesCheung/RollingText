@@ -1,14 +1,13 @@
 package com.yy.mobile.rollingtextview.strategy
 
-import com.yy.mobile.rollingtextview.*
+import com.yy.mobile.rollingtextview.TextManager
 import com.yy.mobile.rollingtextview.util.CircularList
 import com.yy.mobile.rollingtextview.util.ReplaceList
 import kotlin.math.max
 
 /**
- * Created by 张宇 on 2018/3/4.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
+ * @author YvesCheung
+ * 2018/3/4
  */
 open class NonZeroFirstStrategy(private val strategy: CharOrderStrategy) : CharOrderStrategy by strategy {
 

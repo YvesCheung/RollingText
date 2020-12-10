@@ -5,9 +5,8 @@ import android.graphics.Paint
 import java.util.*
 
 /**
- * Created by 张宇 on 2018/2/26.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
+ * @author YvesCheung
+ * 2018/2/26
  */
 internal class TextManager(
     private val textPaint: Paint,

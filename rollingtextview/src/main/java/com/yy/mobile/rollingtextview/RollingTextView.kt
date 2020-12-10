@@ -26,9 +26,8 @@ import com.yy.mobile.rollingtextview.strategy.CharOrderStrategy
 import com.yy.mobile.rollingtextview.strategy.Strategy
 
 /**
- * Created by 张宇 on 2018/2/26.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
+ * @author YvesCheung
+ * 2018/2/26
  */
 @Suppress("MemberVisibilityCanBePrivate")
 open class RollingTextView : View {

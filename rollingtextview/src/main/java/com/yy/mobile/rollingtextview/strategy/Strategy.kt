@@ -1,11 +1,11 @@
 @file:Suppress("FunctionName")
-
 package com.yy.mobile.rollingtextview.strategy
 
+import com.yy.mobile.rollingtextview.RollingTextView
+
 /**
- * Created by 张宇 on 2018/2/28.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
+ * @author YvesCheung
+ * 2018/2/28
  */
 @Suppress("MemberVisibilityCanBePrivate")
 object Strategy {

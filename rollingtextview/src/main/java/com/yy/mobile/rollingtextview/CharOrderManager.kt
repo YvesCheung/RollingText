@@ -6,9 +6,8 @@ import com.yy.mobile.rollingtextview.strategy.Strategy
 import java.util.*
 
 /**
- * Created by 张宇 on 2018/2/28.
- * E-mail: zhangyu4@yy.com
- * YY: 909017428
+ * @author YvesCheung
+ * 2018/2/28
  */
 internal class CharOrderManager {
 
@@ -19,7 +18,7 @@ internal class CharOrderManager {
     fun addCharOrder(orderList: Iterable<Char>) {
         val list = mutableListOf(TextManager.EMPTY)
         list.addAll(orderList)
-        val set = LinkedHashSet<Char>(list)
+        val set = LinkedHashSet(list)
         charOrderList.add(set)
     }
 
