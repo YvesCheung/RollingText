@@ -3,6 +3,25 @@ plugins {
     id 'kotlin-android'
 }
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'RollingText'
+
+    libraryGroupId = 'com.yy.mobile'
+    libraryName = 'RollingTextInspector'
+
+    libraryDescription = 'A tool to debug RollingTextView'
+
+    siteUrl = 'https://github.com/YvesCheung/RollingText'
+    gitUrl = 'https://github.com/YvesCheung/RollingText.git'
+
+    libraryVersion = '1.2.7'
+
+    developerId = 'YvesCheung'
+    developerName = 'YvesCheung'
+    developerEmail = '975135274@qq.com'
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -29,3 +48,5 @@ dependencies {
     compileOnly "com.yy.mobile:RollingText:1.2.7"
     api "com.huya.mobile:Uinspector:1.0.8"
 }
+
+apply from: '../gradle/publish.gradle'
