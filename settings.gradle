@@ -1,1 +1,1 @@
-include ':app', ':rollingtextview'
+include ':app', ':rollingtextview', ':rollingtext-inspector'

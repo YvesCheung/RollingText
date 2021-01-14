@@ -26,8 +26,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    debugImplementation "com.huya.mobile:Uinspector:1.0.8"
     implementation project(":rollingtextview")
+    debugImplementation project(":rollingtext-inspector")
 }
 
 repositories {
