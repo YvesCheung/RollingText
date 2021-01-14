@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.yy.mobile.rollingtextview.CharOrder;
@@ -14,7 +13,6 @@ import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy;
 import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy.TextAlignment;
 import com.yy.mobile.rollingtextview.strategy.Direction;
 import com.yy.mobile.rollingtextview.strategy.NormalAnimationStrategy;
-import com.yy.mobile.rollingtextview.strategy.SimpleCharOrderStrategy;
 import com.yy.mobile.rollingtextview.strategy.Strategy;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,13 +24,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import kotlin.Pair;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
-    private List<String> list = Arrays.asList("1", "21339", "12", "123319", "24", "6", "247",
+    private final List<String> list = Arrays.asList("1", "21339", "12", "123319", "24", "6", "247",
             "5226", "63", "378", "234389", "12395", "2", "1289", "32212", "400");
     private int idx = 0;
 

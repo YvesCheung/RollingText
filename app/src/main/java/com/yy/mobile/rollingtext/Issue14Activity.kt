@@ -3,7 +3,7 @@ package com.yy.mobile.rollingtext
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import com.yy.mobile.rollingtextview.CharOrder
 import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy
 import com.yy.mobile.rollingtextview.strategy.AlignAnimationStrategy.TextAlignment

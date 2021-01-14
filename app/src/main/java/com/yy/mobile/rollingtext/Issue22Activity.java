@@ -9,7 +9,6 @@ import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -18,6 +17,8 @@ import com.yy.mobile.rollingtextview.CharOrder;
 import com.yy.mobile.rollingtextview.RollingTextView;
 
 import java.util.Random;
+
+import androidx.annotation.Nullable;
 
 
 public class Issue22Activity extends Activity {
