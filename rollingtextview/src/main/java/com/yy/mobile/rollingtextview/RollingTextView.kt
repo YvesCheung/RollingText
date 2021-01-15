@@ -192,13 +192,13 @@ open class RollingTextView @JvmOverloads constructor(
             translationX = viewBounds.left + (availableWidth - currentWidth) / 2f
         }
         if (gravity and Gravity.TOP == Gravity.TOP) {
-            translationY = 0f
+            translationY = viewBounds.top.toFloat()
         }
         if (gravity and Gravity.BOTTOM == Gravity.BOTTOM) {
             translationY = viewBounds.top + (availableHeight - currentHeight)
         }
         if (gravity and Gravity.START == Gravity.START) {
-            translationX = 0f
+            translationX = viewBounds.left.toFloat()
         }
         if (gravity and Gravity.END == Gravity.END) {
             translationX = viewBounds.left + (availableWidth - currentWidth)
