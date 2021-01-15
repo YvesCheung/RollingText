@@ -4,7 +4,7 @@
 
 ![preview][1]
 
-[ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion) [![Jitpack](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
 
 [中文版README](README_CN.md)
 
@@ -107,6 +107,27 @@ rollingTextView.addAnimatorListener(new AnimatorListenerAdapter() {
     }
 });
 rollingTextView.setText("i am a text");
+```
+
+Debug
+========
+
+Using [Uinspector](https://github.com/YvesCheung/UInspector), You can debug the properties of `RollingTextView`:
+
+![debug preview](https://raw.githubusercontent.com/YvesCheung/RollingText/master/rollingtextviewinspector/debug.gif)
+
+Add `Uinspector` to your `build.gradle`:
+
+```groovy
+repositories {
+    //...
+    maven { url 'https://dl.bintray.com/yvescheung/maven/' }
+}
+
+dependencies {
+    // debugImplementation because Inspector should only run in debug builds.
+    debugImplementation "com.yy.mobile:RollingTextInspector:x.y.z"
+}
 ```
 
 License
