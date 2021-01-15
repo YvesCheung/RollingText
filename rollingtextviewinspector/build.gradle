@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/YvesCheung/RollingText'
     gitUrl = 'https://github.com/YvesCheung/RollingText.git'
 
-    libraryVersion = '1.2.7'
+    libraryVersion = version
 
     developerId = 'YvesCheung'
     developerName = 'YvesCheung'
@@ -32,20 +32,11 @@ android {
         versionCode 1
         versionName "1.0"
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compileOnly "com.yy.mobile:RollingText:1.2.7"
+    compileOnly project(":RollingText")
     api "com.huya.mobile:Uinspector:1.0.8"
 }
 

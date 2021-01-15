@@ -1,1 +1,5 @@
-include ':app', ':rollingtextview', ':rollingtext-inspector'
+include ':app'
+include ':RollingText'
+project(":RollingText").projectDir = file("./rollingtextview")
+include ':RollingTextInspector'
+project(":RollingTextInspector").projectDir = file("./rollingtextviewinspector")
