@@ -4,6 +4,9 @@
 
 ![preview][1]
 
+
+[ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion) [![Jitpack](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
+
 特性
 ======
 
@@ -100,6 +103,27 @@ rollingTextView.addAnimatorListener(new AnimatorListenerAdapter() {
     }
 });
 rollingTextView.setText("i am a text");
+```
+
+调试
+========
+
+使用 [Uinspector](https://github.com/YvesCheung/UInspector) 可以对 `RollingTextView` 的属性进行检查:
+
+![debug preview](https://raw.githubusercontent.com/YvesCheung/RollingText/master/rollingtextviewinspector/debug.gif)
+
+添加 `Uinspector` 依赖到 `build.gradle` 中:
+
+```groovy
+repositories {
+    //...
+    maven { url 'https://dl.bintray.com/yvescheung/maven/' }
+}
+
+dependencies {
+    // debugImplementation because Inspector should only run in debug builds.
+    debugImplementation "com.yy.mobile:RollingTextInspector:x.y.z"
+}
 ```
 
 许可证
