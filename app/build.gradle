@@ -28,7 +28,6 @@ dependencies {
 
     implementation project(":RollingText")
     debugImplementation project(":RollingTextInspector")
-//    debugImplementation "com.yy.mobile:RollingTextInspector:$version"
 }
 
 repositories {
