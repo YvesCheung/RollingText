@@ -26,11 +26,13 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation project(":rollingtextview")
-    debugImplementation project(":rollingtext-inspector")
+    implementation project(":RollingText")
+    debugImplementation project(":RollingTextInspector")
+//    debugImplementation "com.yy.mobile:RollingTextInspector:$version"
 }
 
 repositories {
     maven { url 'https://jitpack.io' }
+    maven { url 'https://dl.bintray.com/yvescheung/maven/' }
     mavenCentral()
 }
