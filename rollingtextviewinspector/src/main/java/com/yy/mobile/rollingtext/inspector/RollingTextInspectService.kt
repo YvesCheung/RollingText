@@ -1,11 +1,14 @@
-package com.huya.mobile.rollingtext.inspector
+package com.yy.mobile.rollingtext.inspector
 
+import android.content.Context
 import android.view.View
-import com.huya.mobile.uinspector.impl.properties.view.ViewPropertiesParser
-import com.huya.mobile.uinspector.impl.properties.view.ViewPropertiesParserService
-import com.huya.mobile.uinspector.util.colorToString
-import com.huya.mobile.uinspector.util.quote
-import com.huya.mobile.uinspector.util.spStr
+import com.pitaya.mobile.uinspector.impl.properties.view.ViewPropertiesParser
+import com.pitaya.mobile.uinspector.plugins.UInspectorPluginService
+import com.pitaya.mobile.uinspector.plugins.UInspectorPlugins
+import com.pitaya.mobile.uinspector.properties.view.ViewPropertiesPlugin
+import com.pitaya.mobile.uinspector.util.colorToString
+import com.pitaya.mobile.uinspector.util.quote
+import com.pitaya.mobile.uinspector.util.spStr
 import com.yy.mobile.rollingtextview.CharOrder
 import com.yy.mobile.rollingtextview.RollingTextView
 import com.yy.mobile.whisper.Output
@@ -14,13 +17,22 @@ import com.yy.mobile.whisper.Output
  * @author YvesCheung
  * 2021/1/14
  */
-class RollingTextInspectService : ViewPropertiesParserService {
+class RollingTextInspectService : UInspectorPluginService {
 
-    override fun tryCreate(v: View): ViewPropertiesParser<out View>? {
-        if (v is RollingTextView) {
-            return RollingTextViewParser(v)
+    override fun onCreate(context: Context, plugins: UInspectorPlugins) {
+        plugins.prepend(ViewPropertiesPlugin::class.java, RollingTextPlugin())
+    }
+
+    private class RollingTextPlugin : ViewPropertiesPlugin {
+
+        override val uniqueKey: String = "RollingTextView"
+
+        override fun tryCreate(view: View): ViewPropertiesParser<out View>? {
+            if (view is RollingTextView) {
+                return RollingTextViewParser(view)
+            }
+            return null
         }
-        return null
     }
 
     private class RollingTextViewParser(view: RollingTextView) : ViewPropertiesParser<RollingTextView>(view) {
