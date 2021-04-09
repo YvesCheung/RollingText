@@ -29,9 +29,3 @@ dependencies {
     implementation project(":RollingText")
     debugImplementation project(":RollingTextInspector")
 }
-
-repositories {
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://dl.bintray.com/yvescheung/maven/' }
-    mavenCentral()
-}
