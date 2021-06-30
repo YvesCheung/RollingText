@@ -4,8 +4,7 @@
 
 ![preview][1]
 
-
-[ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion) [![Jitpack](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
+[![](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
 
 特性
 ======
@@ -59,13 +58,18 @@ alphaBetView.addCharOrder(CharOrder.Binary);
 =====
 
 ```groovy
-//jcenter
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 dependencies {  
-    implementation 'com.yy.mobile:RollingText:x.y.z'
+    implementation "com.github.YvesCheung.RollingText:RollingText:x.y.z"
 }
 ```
     
-> x.y.z replace with [ ![Download](https://api.bintray.com/packages/yvescheung/maven/RollingText/images/download.svg) ](https://bintray.com/yvescheung/maven/RollingText/_latestVersion)
+> x.y.z replace with [![](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
 
 使用
 =====
@@ -115,14 +119,9 @@ rollingTextView.setText("i am a text");
 添加 `Uinspector` 依赖到 `build.gradle` 中:
 
 ```groovy
-repositories {
-    //...
-    maven { url 'https://dl.bintray.com/yvescheung/maven/' }
-}
-
 dependencies {
     // debugImplementation because Inspector should only run in debug builds.
-    debugImplementation "com.yy.mobile:RollingTextInspector:x.y.z"
+    debugImplementation "com.github.YvesCheung.RollingText:RollingTextInspector:x.y.z"
 }
 ```
 
