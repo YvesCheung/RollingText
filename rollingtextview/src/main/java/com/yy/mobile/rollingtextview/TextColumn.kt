@@ -95,7 +95,11 @@ internal class TextColumn(
             }
 
         //计算当前字符宽度，为第一个字符和最后一个字符的过渡宽度
-        currentWidth = (lastCharWidth - firstCharWidth) * progress.toFloat() + firstCharWidth
+        currentWidth = if (currentChar.toInt() > 0) {
+            (lastCharWidth - firstCharWidth) * progress.toFloat() + firstCharWidth
+        } else {
+            0f
+        }
 
         return PreviousProgress(index, offsetPercentage, progress, currentChar, currentWidth)
     }
