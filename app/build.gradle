@@ -1,18 +1,14 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply from: '../gradle/android_extension.gradle'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.yy.mobile.rollingtext"
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        multiDexEnabled true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,9 +18,8 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.appcompat:appcompat:1.3.0"
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
     implementation project(":RollingText")
     debugImplementation project(":RollingTextInspector")

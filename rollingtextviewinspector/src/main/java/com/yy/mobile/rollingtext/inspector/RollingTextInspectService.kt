@@ -2,6 +2,7 @@ package com.yy.mobile.rollingtext.inspector
 
 import android.content.Context
 import android.view.View
+import com.github.yvescheung.whisper.Output
 import com.pitaya.mobile.uinspector.impl.properties.view.ViewPropertiesParser
 import com.pitaya.mobile.uinspector.plugins.UInspectorPluginService
 import com.pitaya.mobile.uinspector.plugins.UInspectorPlugins
@@ -11,7 +12,6 @@ import com.pitaya.mobile.uinspector.util.quote
 import com.pitaya.mobile.uinspector.util.spStr
 import com.yy.mobile.rollingtextview.CharOrder
 import com.yy.mobile.rollingtextview.RollingTextView
-import com.yy.mobile.whisper.Output
 
 /**
  * @author YvesCheung

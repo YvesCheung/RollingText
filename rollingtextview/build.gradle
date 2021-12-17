@@ -1,52 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+apply from: '../gradle/android_extension.gradle'
 
 ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'RollingText'
-
-    libraryGroupId = 'com.yy.mobile'
     libraryName = 'RollingText'
-
     libraryDescription = 'Android TextView with rolling animation'
-
     siteUrl = 'https://github.com/YvesCheung/RollingText'
     gitUrl = 'https://github.com/YvesCheung/RollingText.git'
-
     libraryVersion = version
-
-    developerId = 'YvesCheung'
-    developerName = 'YvesCheung'
-    developerEmail = '975135274@qq.com'
-}
-
-android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-    }
-
-    sourceSets {
-        main {
-            java {
-                include '**/*.java'
-                include '**/*.kt'
-            }
-        }
-    }
-
-    compileOptions {
-        kotlinOptions.freeCompilerArgs += ['-module-name', "${group}.${name}"]
-    }
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply from: '../gradle/publish.gradle'

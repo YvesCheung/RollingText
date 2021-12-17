@@ -1,8 +1,13 @@
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'signing'
 
-group = libraryGroupId                               // Maven Group ID for the artifact
+group = "io.github.yvescheung"                               // Maven Group ID for the artifact
 version = libraryVersion
+final String developerId = 'YvesCheung'
+final String developerName = 'YvesCheung'
+final String developerEmail = '975135274@qq.com'
+final String licenseName = 'The Apache License, Version 2.0'
+final String licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0'
 
 if (project.hasProperty("android")) { // Android libraries
     task sourcesJar(type: Jar) {
@@ -24,93 +29,85 @@ if (project.hasProperty("android")) { // Android libraries
     }
     ext.libraryOutputFile = "$buildDir/libs/${project.getName()}-${version}.jar"
 }
-println("publish $libraryOutputFile")
+println("artifect: $libraryOutputFile")
 
-publishing {
-    publications {
-        MyPublication(MavenPublication) {
-            groupId libraryGroupId
-            artifactId libraryName
-            artifact(libraryOutputFile)
-            artifact sourcesJar
-            version libraryVersion
-            pom {
-                name = libraryName
-                description = libraryDescription
-                url = siteUrl
+/**
+ * ossrhUsername
+ * ossrhPassword
+ * signing.keyId
+ * signing.password
+ * signing.secretKeyRingFile
+ * Variables defined in local.properties
+ */
+Properties properties = new Properties()
+File localProperties = project.rootProject.file('local.properties')
+if (localProperties.exists()) {
+    properties.load(localProperties.newDataInputStream())
+}
 
-                developers {
-                    developer {
-                        id = developerId
-                        name = developerName
-                        email = developerEmail
+afterEvaluate {
+    publishing {
+        if (properties['ossrhUsername'] != null) {
+            repositories {
+                maven {
+                    // You only need this if you want to publish snapshots, otherwise just set the URL
+                    // to the release repo directly
+                    url = version.endsWith('SNAPSHOT')
+                        ? "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                        : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+                    // The username and password we've fetched earlier
+                    credentials {
+                        username properties['ossrhUsername']
+                        password properties['ossrhPassword']
                     }
-                }
-                scm {
-                    connection = gitUrl
-                    developerConnection = gitUrl
-                    url = siteUrl
                 }
             }
-            pom.withXml {
-                //Creating additional node for dependencies
-                def dependenciesNode = asNode().appendNode('dependencies')
+        }
 
-                //Defining configuration names from which dependencies will be taken (debugCompile or releaseCompile and compile)
-                def configurationNames = ['api', "implementation"]
-                configurationNames.each { configurationName ->
-                    if (!configurations.names.contains(configurationName)) {
-                        return
+        publications {
+            MyPublication(MavenPublication) {
+                from components.release
+                groupId group
+                artifactId libraryName
+                artifact sourcesJar
+                version libraryVersion
+                pom {
+                    name = libraryName
+                    description = libraryDescription
+                    url = siteUrl
+
+                    developers {
+                        developer {
+                            id = developerId
+                            name = developerName
+                            email = developerEmail
+                        }
                     }
-                    configurations[configurationName].allDependencies.each {
-                        if (it.group != null && it.name != null) {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', it.group)
-                            dependencyNode.appendNode('artifactId', it.name)
-                            dependencyNode.appendNode('version', it.version)
 
-                            //If there are any exclusions in dependency
-                            if (it.excludeRules.size() > 0) {
-                                def exclusionsNode = dependencyNode.appendNode('exclusions')
-                                it.excludeRules.each { rule ->
-                                    def exclusionNode = exclusionsNode.appendNode('exclusion')
-                                    exclusionNode.appendNode('groupId', rule.group)
-                                    exclusionNode.appendNode('artifactId', rule.module)
-                                }
-                            }
+                    scm {
+                        connection = gitUrl
+                        developerConnection = gitUrl
+                        url = siteUrl
+                    }
+
+                    licenses {
+                        license {
+                            name = licenseName
+                            url = licenseUrl
                         }
                     }
                 }
             }
         }
     }
-}
 
-// Bintray
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-
-    publications = ['MyPublication']
-
-    pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        publish = true
-        publicDownloadNumbers = true
-        version {
-            desc = libraryDescription
-//            gpg {
-//                sign = true //Determines whether to GPG sign the files. The default is false
-//                passphrase = properties.getProperty("bintray.gpg.password")
-//                //Optional. The passphrase for GPG signing'
-//            }
+    if (properties['signing.keyId'] != null) {
+        ext['signing.keyId'] = properties['signing.keyId']
+        ext['signing.password'] = properties['signing.password']
+        ext['signing.secretKeyRingFile'] = properties['signing.secretKeyRingFile']
+        signing {
+            sign publishing.publications
         }
     }
 }
