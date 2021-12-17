@@ -5,6 +5,7 @@
 ![preview][1]
 
 [![](https://jitpack.io/v/YvesCheung/RollingText.svg)](https://jitpack.io/#YvesCheung/RollingText)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.yvescheung/RollingText.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.yvescheung%22%20AND%20a:%RollingText%22)
 
 特性
 ======
