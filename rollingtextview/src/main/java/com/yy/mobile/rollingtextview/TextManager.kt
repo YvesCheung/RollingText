@@ -2,7 +2,8 @@ package com.yy.mobile.rollingtextview
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import java.util.*
+import java.util.Collections
+import kotlin.math.max
 
 /**
  * @author YvesCheung
@@ -15,8 +16,6 @@ internal class TextManager(
 
     companion object {
         const val EMPTY: Char = 0.toChar()
-
-        const val FLT_EPSILON: Float = 1.192092896e-07F
     }
 
     private val map: MutableMap<Char, Float> = LinkedHashMap(36)
@@ -28,7 +27,7 @@ internal class TextManager(
     var letterSpacingExtra: Int = 0
 
     init {
-        updateFontMatrics()
+        updateFontMetrics()
     }
 
     fun charWidth(c: Char, textPaint: Paint): Float {
@@ -39,7 +38,7 @@ internal class TextManager(
         }
     }
 
-    fun updateFontMatrics() {
+    fun updateFontMetrics() {
         map.clear()
         with(textPaint.fontMetrics) {
             textHeight = bottom - top
@@ -52,11 +51,15 @@ internal class TextManager(
         //当changeCharList.size大于7位数的时候 有可能使Float溢出 所以要用Double
         val initialize = PreviousProgress(0, 0.0, progress.toDouble())
         textColumns.foldRightIndexed(initialize) { index, column, previousProgress ->
-            val nextProgress = charOrderManager.getProgress(previousProgress, index,
-                charListColumns, column.index)
+            val nextProgress = charOrderManager.getProgress(
+                previousProgress, index,
+                charListColumns, column.index
+            )
 
-            val previous = column.onAnimationUpdate(nextProgress.currentIndex,
-                nextProgress.offsetPercentage, nextProgress.progress)
+            val previous = column.onAnimationUpdate(
+                nextProgress.currentIndex,
+                nextProgress.offsetPercentage, nextProgress.progress
+            )
             previous
         }
     }
@@ -75,14 +78,12 @@ internal class TextManager(
 
     val currentTextWidth: Float
         get() {
-            val space = letterSpacingExtra * Math.max(0, textColumns.size - 1)
+            val space = letterSpacingExtra * max(0, textColumns.size - 1)
             val textWidth = textColumns
                 .map { it.currentWidth }
                 .fold(0f) { total, next -> total + next }
             return textWidth + space
         }
-
-    private fun Float.isZero(): Boolean = this < FLT_EPSILON && this > -FLT_EPSILON
 
     fun setText(targetText: CharSequence) {
 
@@ -96,7 +97,7 @@ internal class TextManager(
 
         val sourceText = String(currentText)
 
-        val maxLen = Math.max(sourceText.length, targetText.length)
+        val maxLen = sourceText.length.coerceAtLeast(targetText.length)
 
         charOrderManager.beforeCharOrder(sourceText, targetText)
         for (idx in 0 until maxLen) {
@@ -117,9 +118,7 @@ internal class TextManager(
         private set
 
     var textBaseline = 0f
-        private set(value) {
-            field = value
-        }
+        private set
 }
 
 data class PreviousProgress(

@@ -209,7 +209,7 @@ open class RollingTextView @JvmOverloads constructor(
     }
 
     private fun onTextPaintMeasurementChanged() {
-        textManager.updateFontMatrics()
+        textManager.updateFontMetrics()
         checkForReLayout()
         invalidate()
     }
