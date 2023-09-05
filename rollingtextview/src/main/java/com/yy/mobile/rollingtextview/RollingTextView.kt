@@ -16,6 +16,8 @@ import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.util.TypedValue.COMPLEX_UNIT_SP
+import android.util.TypedValue.applyDimension
 import android.view.Gravity
 import android.view.View
 import android.view.animation.Interpolator
@@ -45,12 +47,16 @@ open class RollingTextView @JvmOverloads constructor(
     private var animator = ValueAnimator.ofFloat(1f)
 
     private val viewBounds = Rect()
-    private var gravity: Int = Gravity.END
     private var textStyle = Typeface.NORMAL
 
     private var targetText: CharSequence = ""
 
     var animationDuration: Long = 750L
+
+    private var viewWidthLargerThanTextWidth = false
+    private var viewHeightLargerThanTextHeight = false
+
+    var gravity: Int = Gravity.END
 
     var typeface: Typeface?
         set(value) {
@@ -70,37 +76,42 @@ open class RollingTextView @JvmOverloads constructor(
         var shadowDy = 0f
         var shadowRadius = 0f
         var text = ""
-        var textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-            12f, context.resources.displayMetrics)
+        var textSize = applyDimension(COMPLEX_UNIT_SP, 12f, context.resources.displayMetrics)
 
         fun applyTypedArray(arr: TypedArray) {
             gravity = arr.getInt(R.styleable.RollingTextView_android_gravity, gravity)
             shadowColor = arr.getColor(R.styleable.RollingTextView_android_shadowColor, shadowColor)
             shadowDx = arr.getFloat(R.styleable.RollingTextView_android_shadowDx, shadowDx)
             shadowDy = arr.getFloat(R.styleable.RollingTextView_android_shadowDy, shadowDy)
-            shadowRadius = arr.getFloat(R.styleable.RollingTextView_android_shadowRadius, shadowRadius)
+            shadowRadius =
+                arr.getFloat(R.styleable.RollingTextView_android_shadowRadius, shadowRadius)
             text = arr.getString(R.styleable.RollingTextView_android_text) ?: ""
             textColor = arr.getColor(R.styleable.RollingTextView_android_textColor, textColor)
             textSize = arr.getDimension(R.styleable.RollingTextView_android_textSize, textSize)
             textStyle = arr.getInt(R.styleable.RollingTextView_android_textStyle, textStyle)
         }
 
-        val arr = context.obtainStyledAttributes(attrs, R.styleable.RollingTextView,
-            defStyleAttr, defStyleRes)
+        val arr = context.obtainStyledAttributes(
+            attrs, R.styleable.RollingTextView,
+            defStyleAttr, defStyleRes
+        )
 
         val textAppearanceResId = arr.getResourceId(
-            R.styleable.RollingTextView_android_textAppearance, -1)
+            R.styleable.RollingTextView_android_textAppearance, -1
+        )
 
         if (textAppearanceResId != -1) {
             val textAppearanceArr = context.obtainStyledAttributes(
-                textAppearanceResId, R.styleable.RollingTextView)
+                textAppearanceResId, R.styleable.RollingTextView
+            )
             applyTypedArray(textAppearanceArr)
             textAppearanceArr.recycle()
         }
 
         applyTypedArray(arr)
 
-        animationDuration = arr.getInt(R.styleable.RollingTextView_duration, animationDuration.toInt()).toLong()
+        animationDuration =
+            arr.getInt(R.styleable.RollingTextView_duration, animationDuration.toInt()).toLong()
 
         textPaint.isAntiAlias = true
         if (shadowColor != 0) {
@@ -153,21 +164,23 @@ open class RollingTextView @JvmOverloads constructor(
 
     override fun onSizeChanged(width: Int, height: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(width, height, oldw, oldh)
-        viewBounds.set(paddingLeft, paddingTop, width - paddingRight,
-            height - paddingBottom)
+        viewBounds.set(
+            paddingLeft, paddingTop, width - paddingRight,
+            height - paddingBottom
+        )
+        viewWidthLargerThanTextWidth = viewBounds.width() > computeDesiredWidth()
+        viewHeightLargerThanTextHeight = viewBounds.height() > computeDesiredHeight()
     }
 
     private fun checkForReLayout(): Boolean {
-        //        val widthChanged = lastMeasuredDesiredWidth != computeDesiredWidth()
-        //        val heightChanged = lastMeasuredDesiredHeight != computeDesiredHeight()
-        //
-        //        if (widthChanged || heightChanged) {
-        //            requestLayout()
-        //            return true
-        //        }
-        //        return false
-        requestLayout()
-        return true
+        val widthChanged = lastMeasuredDesiredWidth != computeDesiredWidth()
+        val heightChanged = lastMeasuredDesiredHeight != computeDesiredHeight()
+
+        if (widthChanged || heightChanged) {
+            requestLayout()
+            return true
+        }
+        return false
     }
 
     private fun computeDesiredWidth(): Int {
@@ -183,27 +196,24 @@ open class RollingTextView @JvmOverloads constructor(
         val currentHeight = textManager.textHeight
         val availableWidth = viewBounds.width()
         val availableHeight = viewBounds.height()
-        var translationX = 0f
-        var translationY = 0f
-        if (gravity and Gravity.CENTER_VERTICAL == Gravity.CENTER_VERTICAL) {
-            translationY = viewBounds.top + (availableHeight - currentHeight) / 2f
+        var translationX = viewBounds.left.toFloat()
+        var translationY = viewBounds.top.toFloat()
+        if (viewWidthLargerThanTextWidth) {
+            if (gravity and Gravity.CENTER_HORIZONTAL == Gravity.CENTER_HORIZONTAL) {
+                translationX = viewBounds.left + (availableWidth - currentWidth) / 2f
+            }
+            if (gravity and Gravity.END == Gravity.END) {
+                translationX = viewBounds.left + (availableWidth - currentWidth)
+            }
         }
-        if (gravity and Gravity.CENTER_HORIZONTAL == Gravity.CENTER_HORIZONTAL) {
-            translationX = viewBounds.left + (availableWidth - currentWidth) / 2f
+        if (viewHeightLargerThanTextHeight) {
+            if (gravity and Gravity.CENTER_VERTICAL == Gravity.CENTER_VERTICAL) {
+                translationY = viewBounds.top + (availableHeight - currentHeight) / 2f
+            }
+            if (gravity and Gravity.BOTTOM == Gravity.BOTTOM) {
+                translationY = viewBounds.top + (availableHeight - currentHeight)
+            }
         }
-        if (gravity and Gravity.TOP == Gravity.TOP) {
-            translationY = viewBounds.top.toFloat()
-        }
-        if (gravity and Gravity.BOTTOM == Gravity.BOTTOM) {
-            translationY = viewBounds.top + (availableHeight - currentHeight)
-        }
-        if (gravity and Gravity.START == Gravity.START) {
-            translationX = viewBounds.left.toFloat()
-        }
-        if (gravity and Gravity.END == Gravity.END) {
-            translationX = viewBounds.left + (availableWidth - currentWidth)
-        }
-
         canvas.translate(translationX, translationY)
         canvas.clipRect(0f, 0f, currentWidth, currentHeight)
     }
@@ -259,13 +269,13 @@ open class RollingTextView @JvmOverloads constructor(
     val currentText
         get() = textManager.currentText
 
-    fun setTextSize(textSize: Float) = setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize)
+    fun setTextSize(textSize: Float) = setTextSize(COMPLEX_UNIT_SP, textSize)
 
     fun getTextSize() = textPaint.textSize
 
     fun setTextSize(unit: Int, size: Float) {
         val r: Resources = context?.resources ?: Resources.getSystem()
-        textPaint.textSize = TypedValue.applyDimension(unit, size, r.displayMetrics)
+        textPaint.textSize = applyDimension(unit, size, r.displayMetrics)
         onTextPaintMeasurementChanged()
     }
 
@@ -321,7 +331,8 @@ open class RollingTextView @JvmOverloads constructor(
     /**
      * 移除动画监听器
      */
-    fun removeAnimatorListener(listener: Animator.AnimatorListener) = animator.removeListener(listener)
+    fun removeAnimatorListener(listener: Animator.AnimatorListener) =
+        animator.removeListener(listener)
 
     /**
      * 添加支持的序列，如[CharOrder.Number]/[CharOrder.Alphabet]
@@ -330,7 +341,8 @@ open class RollingTextView @JvmOverloads constructor(
      *
      * 与[charStrategy]配合使用定义动画效果
      */
-    fun addCharOrder(orderList: CharSequence) = charOrderManager.addCharOrder(orderList.asIterable())
+    fun addCharOrder(orderList: CharSequence) =
+        charOrderManager.addCharOrder(orderList.asIterable())
 
     /**
      * 添加支持的序列，如[CharOrder.Number]/[CharOrder.Alphabet]

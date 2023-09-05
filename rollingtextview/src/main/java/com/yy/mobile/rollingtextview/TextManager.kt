@@ -86,27 +86,15 @@ internal class TextManager(
         }
 
     fun setText(targetText: CharSequence) {
-
-//        val itr = textColumns.iterator()
-//        while (itr.hasNext()) {
-//            val column = itr.next()
-//            if (column.currentWidth.isZero()) {
-//                itr.remove()
-//            }
-//        }
-
         val sourceText = String(currentText)
 
-        val maxLen = sourceText.length.coerceAtLeast(targetText.length)
+        val maxLen = max(sourceText.length, targetText.length)
 
         charOrderManager.beforeCharOrder(sourceText, targetText)
+        textColumns.clear()
         for (idx in 0 until maxLen) {
             val (list, direction) = charOrderManager.findCharOrder(sourceText, targetText, idx)
-            if (idx >= maxLen - sourceText.length) {
-                textColumns[idx].setChangeCharList(list, direction)
-            } else {
-                textColumns.add(idx, TextColumn(this, textPaint, list, direction))
-            }
+            textColumns.add(TextColumn(this, idx, textPaint, list, direction))
         }
         charListColumns = textColumns.map { it.changeCharList }
     }
