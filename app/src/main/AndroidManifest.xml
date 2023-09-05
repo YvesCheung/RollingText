@@ -19,6 +19,7 @@
 
         <activity android:name=".Issue14Activity" />
         <activity android:name=".Issue22Activity" />
+        <activity android:name=".Issue36Activity" />
     </application>
 
 </manifest>
